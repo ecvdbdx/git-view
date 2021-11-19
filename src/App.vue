@@ -1,15 +1,16 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Vue.js App" />
+  <homepage msg="Welcome to Vue.js App" />
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+
+import 'windi.css'
+import Homepage from './components/Homepage.vue';
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    Homepage,
   },
 };
 </script>
