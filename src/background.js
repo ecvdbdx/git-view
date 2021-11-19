@@ -4,6 +4,7 @@ import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 import FolderReader from './services/folderReader';
+import constants from '../utils/constants';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -36,15 +37,15 @@ async function createWindow() {
     win.loadURL('app://./index.html');
   }
 
-  ipcMain.on('getFolderPath-event', (event) => {
+  ipcMain.on(constants.GET_FOLDER_PATH_EVENT, (event) => {
     const folderReader = new FolderReader(win);
     folderReader
       .getFolderPath()
-      .then((path) => {
-        event.reply('getFolderPath-reply', path);
+      .then((res) => {
+        event.reply(constants.GET_FOLDER_PATH_REPLY, res);
       })
       .catch((error) => {
-        event.reply('getFolderPath-reply', error);
+        event.reply(constants.GET_FOLDER_PATH_REPLY, error);
       });
   });
 }
