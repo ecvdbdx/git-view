@@ -1,16 +1,12 @@
 <template>
-  <Homepage/>
+  <router-view />
 </template>
 
 <script>
-
-import 'windi.css'
-import Homepage from './components/Homepage.vue';
+import "windi.css";
 
 export default {
   name: "App",
-  components: {
-    Homepage,
-  },
+  components: {},
 };
 </script>
