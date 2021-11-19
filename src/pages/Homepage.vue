@@ -27,7 +27,7 @@ export default {
 
   setup() {
     const router = useRouter()
-    let folderServiceResponse = ref('')
+    const folderServiceResponse = ref('')
   
     const handleClick = () => {
       ipcRenderer.send('getFolderPath-event')
