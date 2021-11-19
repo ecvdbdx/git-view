@@ -41,8 +41,8 @@ async function createWindow() {
     const folderReader = new FolderReader(win);
     folderReader
       .getFolderPath()
-      .then((res) => {
-        event.reply(constants.GET_FOLDER_PATH_REPLY, res);
+      .then((path) => {
+        event.reply(constants.GET_FOLDER_PATH_REPLY, path);
       })
       .catch((error) => {
         event.reply(constants.GET_FOLDER_PATH_REPLY, error);
