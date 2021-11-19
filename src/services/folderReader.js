@@ -1,6 +1,6 @@
 "use strict";
 
-const { dialog } = require("electron");
+import { dialog } from "electron";
 import { access } from "fs/promises";
 
 class folderReader {
