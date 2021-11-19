@@ -25,10 +25,10 @@ class folderReader {
   checkIsGitFolder(folderPath) {
     return access(`${folderPath}/.git`)
       .then(() => {
-        return folderPath;
+        return {folderPath, isGit: true};
       })
       .catch(() => {
-        return "This folder does not contain a git folder";
+        return {error : "This folder does not contain a git folder", isGit: false};
       });
   }
 }

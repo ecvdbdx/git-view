@@ -7,17 +7,45 @@
       Sélectionnez un dossier contenant un repository git.
     </p>
     <div class="mt-4">
-      <button class="bg-green-500 px-5 py-2 text-white rounded">
+      <button @click="handleClick()" class="bg-green-500 px-5 py-2 text-white rounded">
         Selectionner un dossier
       </button>
-      <router-link to="/gitview">GitView</router-link>
       <p class="mt-2 text-sm text-red-500 text-center">
-        Une erreur s'est produite
+        {{ folderServiceResponse }}
       </p>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { ipcRenderer } from 'electron'
+import {ref} from 'vue'
+import {useRouter} from 'vue-router'
+
+export default {
+
+
+  setup() {
+    const router = useRouter()
+    let folderServiceResponse = ref('')
+  
+    const handleClick = () => {
+      ipcRenderer.send('getFolderPath-event')
+    }
+
+    const resolveFolder = () => {
+      ipcRenderer.on('getFolderPath-reply', (event, args) => {
+        if(args.isGit) {
+          router.push({ name: "GitView", query: {folderPath : args.folderPath[0] }});
+        } else {
+          folderServiceResponse.value = args.error
+          }
+      })
+    }
+
+    resolveFolder()
+    return {handleClick, resolveFolder, folderServiceResponse}
+
+  }
+};
 </script>
