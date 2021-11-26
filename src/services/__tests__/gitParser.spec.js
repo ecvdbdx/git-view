@@ -7,7 +7,7 @@ describe('Given a string of commit', () => {
   68dcd52$$feat(projects): add projects page features$$Sun Nov 21 07:15:10 2021 +0100$$teyz`;
 
   it('Should return a Promise', () => {
-    expect(gitReader.getGitLogs('/')).resolves.toBeTruthy();
+    expect(gitReader.getGitLogs(__dirname)).resolves.toBeTruthy();
   });
 
   it('Should return an Array of commit', () => {

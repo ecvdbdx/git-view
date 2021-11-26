@@ -25,7 +25,7 @@ export default class GitReader {
       exec(
         `git log HEAD --max-count=${nbCommit} --pretty='format:%h$$%s$$%cd$$%an'`,
         { cwd: path },
-        function (err, stdout) {
+        (err, stdout) => {
           if (err) {
             return reject(err);
           }
