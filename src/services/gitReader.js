@@ -4,11 +4,8 @@ export default class GitReader {
   constructor() {}
 
   parser(gitString) {
-    const gitArray = gitString.split('ùù');
-    console.log(`gitArray`, gitArray);
-    return gitArray.map((commit) => {
-      const commitArray = gitString.split('$$');
-      console.log(`commitArray`, commitArray);
+    return gitString.split('\n').map((commit) => {
+      const commitArray = commit.split('$$');
       return {
         sha: commitArray[0],
         message: commitArray[1],
@@ -20,7 +17,7 @@ export default class GitReader {
 
   getGitLog(path) {
     exec(
-      `git log HEAD --max-count=3 --pretty='format:%h$$%s$$%cd$$%anùù'`,
+      `git log HEAD --max-count=3 --pretty='format:%h$$%s$$%cd$$%an'`,
       { cwd: path },
       function (err, stdout) {
         console.log(this.parser(stdout));
