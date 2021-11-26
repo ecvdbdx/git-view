@@ -5,7 +5,7 @@ export default class GitReader {
 
   parser(gitString) {
     return gitString.split('\n').map((commit) => {
-      const commitArray = commit.split('$$');
+      const commitArray = commit.trim().split('$$');
       return {
         sha: commitArray[0],
         message: commitArray[1],
@@ -15,13 +15,16 @@ export default class GitReader {
     });
   }
 
-  getGitLog(path) {
-    exec(
-      `git log HEAD --max-count=3 --pretty='format:%h$$%s$$%cd$$%an'`,
-      { cwd: path },
-      function (err, stdout) {
-        console.log(this.parser(stdout));
-      }
-    );
+  getGitLogs(path) {
+    return new Promise((resolve, reject) => {
+      exec(
+        `git log HEAD --max-count=3 --pretty='format:%h$$%s$$%cd$$%an'`,
+        { cwd: path },
+        function (err, stdout) {
+          resolve(() => this.parser(stdout));
+          reject(() => err);
+        }
+      );
+    });
   }
 }
