@@ -9,7 +9,6 @@ import {
   GET_FOLDER_PATH_REPLY,
 } from '../utils/constants';
 import FolderReader from './services/folderReader';
-import getGitLogs from './services/gitReader';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -53,8 +52,6 @@ async function createWindow() {
         event.reply(GET_FOLDER_PATH_REPLY, error);
       });
   });
-
-  getGitLogs('/Users/teyz/portfolio');
 }
 
 // Quit when all windows are closed.
