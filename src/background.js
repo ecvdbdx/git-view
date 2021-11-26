@@ -45,7 +45,7 @@ async function createWindow() {
     folderReader
       .getFolderPath()
       .then((path) => {
-        event.reply(constants.GET_FOLDER_PATH_REPLY, path);
+        event.reply(GET_FOLDER_PATH_REPLY, path);
       })
       .catch((error) => {
         event.reply(GET_FOLDER_PATH_REPLY, error);
