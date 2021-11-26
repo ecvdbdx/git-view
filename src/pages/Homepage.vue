@@ -7,7 +7,10 @@
       Sélectionnez un dossier contenant un repository git.
     </p>
     <div class="mt-4">
-      <button @click="handleClick()" class="bg-green-500 px-5 py-2 text-white rounded">
+      <button
+        @click="handleClick()"
+        class="bg-green-500 px-5 py-2 text-white rounded"
+      >
         Selectionner un dossier
       </button>
       <p class="mt-2 text-sm text-red-500 text-center">
@@ -18,34 +21,34 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
-import {ref} from 'vue'
-import {useRouter} from 'vue-router'
+import { ipcRenderer } from 'electron';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
-
-
   setup() {
-    const router = useRouter()
-    const folderServiceResponse = ref('')
-  
+    const router = useRouter();
+    const folderServiceResponse = ref('');
+
     const handleClick = () => {
-      ipcRenderer.send('getFolderPath-event')
-    }
+      ipcRenderer.send('getFolderPath-event');
+    };
 
     const resolveFolder = () => {
       ipcRenderer.on('getFolderPath-reply', (event, args) => {
-        if(args.isGit) {
-          router.push({ name: "GitView", query: {folderPath : args.folderPath[0] }});
+        if (args.isGit) {
+          router.push({
+            name: 'GitView',
+            query: { folderPath: args.folderPath[0] },
+          });
         } else {
-          folderServiceResponse.value = args.error
-          }
-      })
-    }
+          folderServiceResponse.value = args.error;
+        }
+      });
+    };
 
-    resolveFolder()
-    return {handleClick, resolveFolder, folderServiceResponse}
-
-  }
+    resolveFolder();
+    return { handleClick, resolveFolder, folderServiceResponse };
+  },
 };
 </script>
