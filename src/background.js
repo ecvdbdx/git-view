@@ -1,13 +1,14 @@
 'use strict';
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron';
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
+import { app, BrowserWindow, ipcMain, protocol } from 'electron';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
-import FolderReader from './services/folderReader';
+import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
+
 import {
   GET_FOLDER_PATH_EVENT,
   GET_FOLDER_PATH_REPLY,
 } from '../utils/constants';
+import FolderReader from './services/folderReader';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
