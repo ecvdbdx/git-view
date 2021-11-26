@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import "windi.css";
+import 'windi.css';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {},
 };
 </script>
