@@ -15,14 +15,21 @@ export default class GitReader {
     });
   }
 
-  getGitLogs(path) {
+  /**
+   * @param {string} path - Path of the git folder
+   * @param {number} nbCommit - Number of commit
+   * @returns Promise of Array
+   */
+  getGitLogs(path, nbCommit = 10) {
     return new Promise((resolve, reject) => {
       exec(
-        `git log HEAD --max-count=3 --pretty='format:%h$$%s$$%cd$$%an'`,
+        `git log HEAD --max-count=${nbCommit} --pretty='format:%h$$%s$$%cd$$%an'`,
         { cwd: path },
         function (err, stdout) {
-          resolve(() => this.parser(stdout));
-          reject(() => err);
+          if (err) {
+            return reject(err);
+          }
+          resolve(this.parser(stdout));
         }
       );
     });
