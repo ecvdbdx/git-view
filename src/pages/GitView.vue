@@ -1,9 +1,9 @@
 <template>
   <div class="flex h-full flex-col">
     <div class="flex justify-between py-4 px-4">
-      <button class="bg-green-500 px-5 py-2 text-white rounded">
-        <router-link to="/">Back</router-link>
-      </button>
+      <router-link to="/" class="bg-green-500 px-5 py-2 text-white rounded"
+        >Back</router-link
+      >
       <div>{{ folderPath }}</div>
       <div></div>
     </div>

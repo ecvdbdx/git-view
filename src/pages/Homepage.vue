@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center justify-center h-full">
     <h1 class="text-4xl font-bold text-green-500 text-center">
-      Bienvenu sur Git View
+      Bienvenue sur Git View
     </h1>
     <p class="mt-8 text-center text-grey-400">
       Sélectionnez un dossier contenant un repository git.
