@@ -16,6 +16,7 @@
         >
           <div class="bg-gray-300 rounded-1/2 w-24 h-24"></div>
           <p class="pt-2">{{ commit.sha }}</p>
+          <p class="pt-2">{{ commit.author }}</p>
         </div>
       </div>
     </div>
@@ -23,14 +24,25 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron';
+import { onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
-
-import commits from '../mocks/commits.js';
 
 export default {
   setup() {
     const route = useRoute();
     const { folderPath } = route.query;
+    const commits = ref([]);
+
+    const resolveGetGitLogs = () => {
+      ipcRenderer.on('getGitLogs-reply', (event, args) => {
+        commits.value = args;
+      });
+    };
+    resolveGetGitLogs();
+    onBeforeMount(() => {
+      ipcRenderer.send('getGitLogs-event', folderPath);
+    });
 
     return { commits, folderPath };
   },
