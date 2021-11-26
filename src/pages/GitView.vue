@@ -9,7 +9,6 @@
     </div>
     <div class="w-full flex h-full">
       <div class="flex self-center line relative">
-        <!-- <div class="line"></div> -->
         <div
           v-for="commit in commits"
           :key="commit.sha"
@@ -31,8 +30,7 @@ import commits from '../mocks/commits.js';
 export default {
   setup() {
     const route = useRoute();
-    const query = route.query;
-    const { folderPath } = query;
+    const { folderPath } = route.query;
 
     return { commits, folderPath };
   },
