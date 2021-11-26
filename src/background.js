@@ -7,8 +7,11 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import {
   GET_FOLDER_PATH_EVENT,
   GET_FOLDER_PATH_REPLY,
+  GET_GIT_LOGS_EVENT,
+  GET_GIT_LOGS_REPLY,
 } from '../utils/constants';
 import FolderReader from './services/folderReader';
+import GitReader from './services/gitReader';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -51,6 +54,13 @@ async function createWindow() {
       .catch((error) => {
         event.reply(GET_FOLDER_PATH_REPLY, error);
       });
+  });
+
+  ipcMain.on(GET_GIT_LOGS_EVENT, (event, folderPath) => {
+    const gitReader = new GitReader();
+    gitReader.getGitLogs(folderPath, 10).then((commitArray) => {
+      event.reply(GET_GIT_LOGS_REPLY, commitArray);
+    });
   });
 }
 
