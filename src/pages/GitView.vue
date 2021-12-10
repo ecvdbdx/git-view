@@ -10,13 +10,17 @@
     <div class="w-full flex h-full">
       <div class="flex self-center line relative">
         <div
-          v-for="commit in commits"
-          :key="commit.sha"
+          v-for="{ sha, author, isHead } in commits"
+          :key="sha"
           class="px-4 text-center"
         >
-          <div class="bg-gray-300 rounded-1/2 w-24 h-24"></div>
-          <p class="pt-2">{{ commit.sha }}</p>
-          <p class="pt-2">{{ commit.author }}</p>
+          <div
+            class="bg-gray-300 rounded-1/2 w-24 h-24"
+            :class="{ 'border-4 border-green-500': isHead }"
+          ></div>
+          <p class="pt-2">{{ sha }}</p>
+          <p class="pt-2">{{ author }}</p>
+          <p class="pt-2" v-if="isHead">HEAD</p>
         </div>
       </div>
     </div>
