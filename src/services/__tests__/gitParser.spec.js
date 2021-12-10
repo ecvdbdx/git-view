@@ -13,9 +13,9 @@ describe('Given a string of commit', () => {
   it('Should return an Array of commit', () => {
     expect(gitReader.parser(gitIncommingCommits)).toStrictEqual([
       {
-        sha: 'dff4044',
-        message: 'fix(contact, projects, about): responsive',
-        date: 'Sun Nov 21 19:20:35 2021 +0100',
+        sha: '68dcd52',
+        message: 'feat(projects): add projects page features',
+        date: 'Sun Nov 21 07:15:10 2021 +0100',
         author: 'teyz',
         isHead: false,
       },
@@ -27,9 +27,9 @@ describe('Given a string of commit', () => {
         isHead: true,
       },
       {
-        sha: '68dcd52',
-        message: 'feat(projects): add projects page features',
-        date: 'Sun Nov 21 07:15:10 2021 +0100',
+        sha: 'dff4044',
+        message: 'fix(contact, projects, about): responsive',
+        date: 'Sun Nov 21 19:20:35 2021 +0100',
         author: 'teyz',
         isHead: false,
       },
