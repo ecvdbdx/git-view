@@ -26,6 +26,7 @@ export default {
   },
 
   setup(props) {
+    console.log(`props.commit`, props.commit);
     const sha = computed(() => props.commit.sha);
     const author = computed(() => props.commit.author);
     const isHead = computed(() => props.commit.isHead);
