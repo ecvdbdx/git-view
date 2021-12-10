@@ -13,7 +13,7 @@ export default class GitReader {
           message,
           date,
           author,
-          isHead: refNames ? refNames.includes('(HEAD)') : false,
+          isHead: refNames ? refNames.includes('(HEAD') : false,
         };
       })
       .reverse();
@@ -27,11 +27,11 @@ export default class GitReader {
   getGitLogs(path, nbCommit = 10) {
     return new Promise((resolve, reject) => {
       exec(
-        `git log origin --max-count=${nbCommit} --pretty='format:%h$$%s$$%cd$$%an$$%d'`,
+        `git log --max-count=${nbCommit} --pretty='format:%h$$%s$$%cd$$%an$$%d'`,
         { cwd: path },
         (err, stdout) => {
           if (err) {
-            return reject(err);
+            return reject({ error: true, message: err });
           }
           resolve(this.parser(stdout));
         }

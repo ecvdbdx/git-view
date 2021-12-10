@@ -16,9 +16,10 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+
+import { getFolderPath } from './services/home';
 
 export default {
   setup() {
@@ -26,24 +27,19 @@ export default {
     const folderServiceResponse = ref('');
 
     const handleClick = () => {
-      ipcRenderer.send('getFolderPath-event');
-    };
-
-    const resolveFolder = () => {
-      ipcRenderer.on('getFolderPath-reply', (event, args) => {
-        if (args.isGit) {
+      getFolderPath()
+        .then((folderPath) => {
           router.push({
             name: 'GitView',
-            query: { folderPath: args.folderPath[0] },
+            query: { folderPath: folderPath },
           });
-        } else {
-          folderServiceResponse.value = args.error;
-        }
-      });
+        })
+        .catch((error) => {
+          folderServiceResponse.value = error;
+        });
     };
 
-    resolveFolder();
-    return { handleClick, resolveFolder, folderServiceResponse };
+    return { handleClick, folderServiceResponse };
   },
 };
 </script>
