@@ -1,18 +1,22 @@
 import { exec } from 'child_process';
 
 export default class GitReader {
-  constructor() {}
-
   parser(gitString) {
-    return gitString.split('\n').map((commit) => {
-      const commitArray = commit.trim().split('$$');
-      return {
-        sha: commitArray[0],
-        message: commitArray[1],
-        date: commitArray[2],
-        author: commitArray[3],
-      };
-    });
+    return gitString
+      .split('\n')
+      .map((commit) => {
+        const [sha, message, date, author, refNames] = commit
+          .trim()
+          .split('$$');
+        return {
+          sha,
+          message,
+          date,
+          author,
+          isHead: refNames ? refNames.includes('(HEAD)') : false,
+        };
+      })
+      .reverse();
   }
 
   /**
@@ -23,7 +27,7 @@ export default class GitReader {
   getGitLogs(path, nbCommit = 10) {
     return new Promise((resolve, reject) => {
       exec(
-        `git log HEAD --max-count=${nbCommit} --pretty='format:%h$$%s$$%cd$$%an'`,
+        `git log origin --max-count=${nbCommit} --pretty='format:%h$$%s$$%cd$$%an$$%d'`,
         { cwd: path },
         (err, stdout) => {
           if (err) {

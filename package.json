@@ -11,7 +11,7 @@
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "prepare": "husky install",
-    "unit-test": "jest"
+    "test": "jest"
   },
   "main": "background.js",
   "dependencies": {
