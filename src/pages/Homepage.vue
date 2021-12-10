@@ -1,54 +1,15 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-full">
-    <h1 class="text-4xl font-bold text-green-500 text-center">
-      Bienvenue sur Git View
-    </h1>
-    <p class="mt-8 text-center text-grey-400">
-      Sélectionnez un dossier contenant un repository git.
-    </p>
-    <div class="mt-4">
-      <button
-        @click="handleClick()"
-        class="bg-green-500 px-5 py-2 text-white rounded"
-      >
-        Selectionner un dossier
-      </button>
-      <p class="mt-2 text-sm text-red-500 text-center">
-        {{ folderServiceResponse }}
-      </p>
-    </div>
-  </div>
+  <HomePageModule />
 </template>
 
 <script>
-import { ipcRenderer } from 'electron';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import HomePageModule from '@/modules/HomePage';
 
 export default {
-  setup() {
-    const router = useRouter();
-    const folderServiceResponse = ref('');
+  name: 'HomePage',
 
-    const handleClick = () => {
-      ipcRenderer.send('getFolderPath-event');
-    };
-
-    const resolveFolder = () => {
-      ipcRenderer.on('getFolderPath-reply', (event, args) => {
-        if (args.isGit) {
-          router.push({
-            name: 'GitView',
-            query: { folderPath: args.folderPath[0] },
-          });
-        } else {
-          folderServiceResponse.value = args.error;
-        }
-      });
-    };
-
-    resolveFolder();
-    return { handleClick, resolveFolder, folderServiceResponse };
+  components: {
+    HomePageModule,
   },
 };
 </script>
