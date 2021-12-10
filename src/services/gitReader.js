@@ -2,8 +2,8 @@ import { exec } from 'child_process';
 
 export default class GitReader {
   parser(gitString) {
-    const gitArray = gitString.split(/\r?\n/g);
-    return gitArray
+    return gitString
+      .split('\n')
       .map((commit) => {
         const [sha, message, date, author, refNames] = commit
           .trim()
@@ -27,7 +27,7 @@ export default class GitReader {
   getGitLogs(path, nbCommit = 10) {
     return new Promise((resolve, reject) => {
       exec(
-        `git log origin --max-count=${nbCommit} --pretty=%h$$%s$$%cd$$%an$$%d`,
+        `git log origin --max-count=${nbCommit} --pretty='format:%h$$%s$$%cd$$%an$$%d'`,
         { cwd: path },
         (err, stdout) => {
           if (err) {
