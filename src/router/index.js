@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import GitView from '@/pages/GitView.vue';
-import Home from '@/pages/Homepage.vue';
+import Home from '@/pages/HomePage.vue';
 
 const routes = [
   {
