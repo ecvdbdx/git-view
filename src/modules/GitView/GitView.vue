@@ -1,25 +1,19 @@
 <template>
   <div class="flex h-full flex-col">
-    <div class="flex justify-between py-4 px-4">
+    <div class="relative flex justify-between py-4 px-4">
       <DsButton to="/">Back</DsButton>
-      <div>{{ folderPath }}</div>
-      <div></div>
+      <div class="text-center absolute w-full text-align-middle">
+        {{ folderPath }}
+      </div>
+      <div />
     </div>
     <div class="w-full flex h-full">
       <div class="flex self-center line relative">
-        <div
-          v-for="{ sha, author, isHead } in commits"
-          :key="sha"
-          class="px-4 text-center"
-        >
-          <div
-            class="bg-gray-300 rounded-1/2 w-24 h-24"
-            :class="{ 'border-4 border-green-500': isHead }"
-          ></div>
-          <p class="pt-2">{{ sha }}</p>
-          <p class="pt-2">{{ author }}</p>
-          <p class="pt-2" v-if="isHead">HEAD</p>
-        </div>
+        <CommitView
+          v-for="(commit, index) in commits"
+          :key="index"
+          :commit="commit"
+        />
       </div>
     </div>
   </div>
@@ -29,8 +23,14 @@
 import { ipcRenderer } from 'electron';
 import { onBeforeMount, ref } from 'vue';
 
+import { CommitView } from './components';
+
 export default {
   name: 'GitViewModule',
+
+  components: {
+    CommitView,
+  },
 
   props: {
     folderPath: {
