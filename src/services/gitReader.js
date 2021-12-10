@@ -2,8 +2,8 @@ import { exec } from 'child_process';
 
 export default class GitReader {
   parser(gitString) {
-    return gitString
-      .split('\n')
+    const gitArray = gitString.split(/\r?\n/g);
+    return gitArray
       .map((commit) => {
         const [sha, message, date, author, refNames] = commit
           .trim()
