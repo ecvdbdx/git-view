@@ -22,6 +22,7 @@
 <script>
 import { ipcRenderer } from 'electron';
 import { onBeforeMount, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 import { CommitView } from './components';
 
@@ -32,14 +33,10 @@ export default {
     CommitView,
   },
 
-  props: {
-    folderPath: {
-      type: String,
-      required: true,
-    },
-  },
-
   setup(props) {
+    const route = useRoute();
+    const { folderPath } = route.query;
+
     const commits = ref([]);
 
     const resolveGetGitLogs = () => {
@@ -52,7 +49,7 @@ export default {
       ipcRenderer.send('getGitLogs-event', props.folderPath);
     });
 
-    return { commits };
+    return { commits, folderPath };
   },
 };
 </script>
