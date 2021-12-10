@@ -1,9 +1,7 @@
 <template>
   <div class="flex h-full flex-col">
     <div class="flex justify-between py-4 px-4">
-      <router-link to="/" class="bg-green-500 px-5 py-2 text-white rounded"
-        >Back</router-link
-      >
+      <DsButton to="/">Back</DsButton>
       <div>{{ folderPath }}</div>
       <div></div>
     </div>

@@ -7,7 +7,7 @@
       Sélectionnez un dossier contenant un repository git.
     </p>
     <div class="mt-4">
-      <Button @click="handleClick()"> Selectionner un dossier </Button>
+      <DsButton @click="handleClick()"> Selectionner un dossier </DsButton>
       <p class="mt-2 text-sm text-red-500 text-center">
         {{ folderServiceResponse }}
       </p>
