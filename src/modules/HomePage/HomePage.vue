@@ -7,43 +7,35 @@
       Sélectionnez un dossier contenant un repository git.
     </p>
     <div class="mt-4">
-      <DsButton @click="handleClick()"> Selectionner un dossier </DsButton>
+      <DsButton @click="onButtonClick()"> Selectionner un dossier </DsButton>
       <p class="mt-2 text-sm text-red-500 text-center">
-        {{ folderServiceResponse }}
+        {{ folderPathError }}
       </p>
     </div>
   </div>
 </template>
 
 <script>
-import { ipcRenderer } from 'electron';
-import { ref } from 'vue';
+import { onMounted } from '@vue/runtime-core';
 import { useRouter } from 'vue-router';
+
+import { useFolder } from '@/composables/useFolder';
 
 export default {
   setup() {
+    const { getFolderPath, registerGetFolderEvent, folderPathError } =
+      useFolder();
     const router = useRouter();
-    const folderServiceResponse = ref('');
 
-    const handleClick = () => {
-      ipcRenderer.send('getFolderPath-event');
+    const onButtonClick = async () => {
+      getFolderPath();
     };
 
-    const resolveFolder = () => {
-      ipcRenderer.on('getFolderPath-reply', (event, args) => {
-        if (args.isGit) {
-          router.push({
-            name: 'GitView',
-            query: { folderPath: args.folderPath[0] },
-          });
-        } else {
-          folderServiceResponse.value = args.error;
-        }
-      });
-    };
+    onMounted(() => {
+      registerGetFolderEvent(router);
+    });
 
-    resolveFolder();
-    return { handleClick, resolveFolder, folderServiceResponse };
+    return { onButtonClick, folderPathError };
   },
 };
 </script>
