@@ -18,8 +18,8 @@ const registerGetFolderEvent = (router) => {
   });
 };
 
-const getFolderPath = async () => {
-  await ipcRenderer.send('getFolderPath-event');
+const getFolderPath = () => {
+  ipcRenderer.send('getFolderPath-event');
 };
 
 export const useFolder = () => ({
