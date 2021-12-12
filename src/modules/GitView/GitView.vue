@@ -7,24 +7,37 @@
       </div>
       <div />
     </div>
-    <ul class="flex text-xs">
-      <li
-        class="p-2"
-        v-for="(branch, bindex) in branchs"
-        :key="bindex"
-        @click="checkoutBranch(branch)"
+    <div class="flex h-full items-center">
+      <ul
+        class="
+          flex flex-col
+          justify-center
+          text-xs
+          border-r-green-400 border-solid border-r-width-2
+          h-full
+          flex-shrink-0
+          p-r-4
+        "
       >
-        {{ branch }}
-      </li>
-    </ul>
-    <div class="w-full flex h-full">
-      <div class="flex self-center line relative">
-        <CommitView
-          v-for="(commit, index) in commits"
-          :key="index"
-          :commit="commit"
-          @click="checkoutCommit(commit.sha)"
-        />
+        <li
+          class="p-2 cursor-pointer"
+          :class="{ 'text-green-500': isCurrent }"
+          v-for="({ name, isCurrent }, bindex) in branchs"
+          :key="bindex"
+          @click="checkoutBranch(name)"
+        >
+          {{ name }}
+        </li>
+      </ul>
+      <div class="w-full flex h-full overflow-scroll">
+        <div class="flex self-center line relative">
+          <CommitView
+            v-for="(commit, index) in commits"
+            :key="index"
+            :commit="commit"
+            @click="checkoutCommit(commit.sha)"
+          />
+        </div>
       </div>
     </div>
   </div>

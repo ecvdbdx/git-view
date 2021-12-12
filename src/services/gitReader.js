@@ -18,6 +18,12 @@ export default class GitReader {
       })
       .reverse();
   }
+  branchsParser(branchList) {
+    return branchList.split('\n').map((branch) => ({
+      name: branch.replace('*', '').trim(),
+      isCurrent: branch.includes('*'),
+    }));
+  }
 
   /**
    * @param {string} path - Path of the git folder
@@ -55,7 +61,7 @@ export default class GitReader {
    */
   async getGitBranchs(path) {
     const commandResponse = await this.execGit(path, 'git branch');
-    return commandResponse.split('\n').map((branch) => branch.trim());
+    return this.branchsParser(commandResponse);
   }
 
   /**
