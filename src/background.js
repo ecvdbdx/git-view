@@ -4,14 +4,7 @@ import { app, BrowserWindow, ipcMain, protocol } from 'electron';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 
-import {
-  GET_FOLDER_PATH_EVENT,
-  GET_FOLDER_PATH_REPLY,
-  GET_GIT_LOGS_EVENT,
-  GET_GIT_LOGS_REPLY,
-} from '../utils/constants';
-import FolderReader from './services/folderReader';
-import GitReader from './services/gitReader';
+import CustomEvents from './events';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -43,25 +36,8 @@ async function createWindow() {
     // Load the index.html when not in development
     win.loadURL('app://./index.html');
   }
-
-  ipcMain.on(GET_FOLDER_PATH_EVENT, (event) => {
-    const folderReader = new FolderReader(win);
-    folderReader
-      .getFolderPath()
-      .then((path) => {
-        event.reply(GET_FOLDER_PATH_REPLY, path);
-      })
-      .catch((error) => {
-        event.reply(GET_FOLDER_PATH_REPLY, error);
-      });
-  });
-
-  ipcMain.on(GET_GIT_LOGS_EVENT, (event, folderPath) => {
-    const gitReader = new GitReader();
-    gitReader.getGitLogs(folderPath, 10).then((commitArray) => {
-      event.reply(GET_GIT_LOGS_REPLY, commitArray);
-    });
-  });
+  // Initialize events
+  CustomEvents.forEach(({ name, fct }) => ipcMain.on(name, fct(win)));
 }
 
 // Quit when all windows are closed.
