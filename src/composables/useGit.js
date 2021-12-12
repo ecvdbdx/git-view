@@ -28,6 +28,7 @@ const getCommits = () => {
 
 const checkoutBranch = (branchName) => {
   ipcRenderer.send('gitCheckout', folderPath.value, branchName);
+  getBranchs();
   getCommits();
 };
 
