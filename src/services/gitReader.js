@@ -45,6 +45,7 @@ export default class GitReader {
       path,
       `git log --pretty='format:%h$$%s$$%cd$$%an$$%d'`
     );
+
     return this.commitsParser(commandResponse);
   }
 

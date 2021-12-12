@@ -6,7 +6,6 @@ describe('Given a string of commit', () => {
   430fdcf$$feat(img): optimize pagespeed$$Sun Nov 21 07:30:52 2021 +0100$$teyz$$ (HEAD)
   68dcd52$$feat(projects): add projects page features$$Sun Nov 21 07:15:10 2021 +0100$$teyz`;
 
-  console.log(gitReader.getGitLogs(__dirname));
   it('Should return Promises', async () => {
     expect(gitReader.getGitLogs(__dirname)).resolves.toBeTruthy();
     expect(gitReader.getGitBranchs(__dirname)).resolves.toBeTruthy();

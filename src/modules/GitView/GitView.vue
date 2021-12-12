@@ -18,13 +18,12 @@
       </li>
     </ul>
     <div class="w-full flex h-full">
-      {{ headCommitSha }}
       <div class="flex self-center line relative">
         <CommitView
           v-for="(commit, index) in commits"
           :key="index"
           :commit="commit"
-          @click="checkout(commit.sha)"
+          @click="checkoutCommit(commit.sha)"
         />
       </div>
     </div>
@@ -32,9 +31,11 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron';
-import { computed, onBeforeMount, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { onBeforeMount } from 'vue';
+import { useRouter } from 'vue-router';
+
+import { useFolder } from '@/composables/useFolder';
+import { useGit } from '@/composables/useGit';
 
 import { CommitView } from './components';
 
@@ -45,59 +46,26 @@ export default {
     CommitView,
   },
 
-  setup(props) {
-    const route = useRoute();
-    const { folderPath } = route.query;
-
-    const commits = ref([]);
-    const branchs = ref([]);
-    const headCommitSha = computed({
-      get: () => commits.value.find((commit) => commit.isHead)?.sha,
-      set: (newValue) => {
-        commits.value.map((commit) => {
-          commit.isHead = commit.sha === newValue;
-          return commit;
-        });
-      },
-    });
-
-    const checkout = (commitSha) => {
-      ipcRenderer.send('gitCheckout', props.folderPath, commitSha);
-      headCommitSha.value = commitSha;
-    };
-
-    const checkoutBranch = (branchName) => {
-      ipcRenderer.send('gitCheckout', props.folderPath, branchName);
-      getCommit();
-    };
-
-    const getCommit = () => {
-      ipcRenderer.send('getGitLogs-event', props.folderPath);
-      ipcRenderer.on('getGitLogs-reply', (event, args) => {
-        commits.value = args;
-      });
-    };
-    const getBranchs = () => {
-      ipcRenderer.send('getGitBranchs-event', props.folderPath);
-
-      ipcRenderer.on('getGitBranchs-reply', (event, args) => {
-        branchs.value = args;
-      });
-    };
+  setup() {
+    const { folderPath } = useFolder();
+    const router = useRouter();
+    const {
+      getCommits,
+      getBranchs,
+      checkoutCommit,
+      checkoutBranch,
+      headCommitSha,
+      commits,
+      branchs,
+    } = useGit();
 
     onBeforeMount(() => {
-      getCommit();
+      if (!folderPath.value) router.push('/');
+      getCommits();
       getBranchs();
     });
 
-    return {
-      folderPath,
-      commits,
-      branchs,
-      checkout,
-      checkoutBranch,
-      headCommitSha,
-    };
+    return { commits, branchs, checkoutCommit, checkoutBranch, headCommitSha };
   },
 };
 </script>
