@@ -1,19 +1,21 @@
 <template>
-  <div class="flex h-full flex-col">
-    <div class="relative flex justify-between py-4 px-4">
-      <DsButton to="/">Back</DsButton>
-      <div class="text-center absolute w-full text-align-middle">
-        {{ folderPath }}
-      </div>
-      <div />
-    </div>
-    <div class="w-full flex h-full">
-      <div class="flex self-center relative">
-        <CommitView
-          v-for="(commit, index) in commits"
-          :key="index"
-          :commit="commit"
-        />
+  <div class="flex h-full flex-col overflow-hidden">
+    <div class="flex h-full items-center">
+      <SideBar :branchs="branchs" />
+      <div class="w-full flex h-full overflow-scroll relative">
+        <p class="text-center absolute w-full text-align-middle py-4">
+          {{ folderPath }}
+        </p>
+        <div class="flex w-full h-full overflow-scroll">
+          <div class="flex self-center relative">
+            <CommitView
+              v-for="(commit, index) in commits"
+              :key="index"
+              :commit="commit"
+              @click="checkoutCommit(commit.sha)"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -26,13 +28,14 @@ import { useRouter } from 'vue-router';
 import { useFolder } from '@/composables/useFolder';
 import { useGit } from '@/composables/useGit';
 
-import { CommitView } from './components';
+import { CommitView, SideBar } from './components';
 
 export default {
   name: 'GitViewModule',
 
   components: {
     CommitView,
+    SideBar,
   },
 
   setup() {
@@ -54,7 +57,14 @@ export default {
       getBranchs();
     });
 
-    return { commits, branchs, checkoutCommit, checkoutBranch, headCommitSha };
+    return {
+      commits,
+      branchs,
+      checkoutCommit,
+      checkoutBranch,
+      headCommitSha,
+      folderPath,
+    };
   },
 };
 </script>
