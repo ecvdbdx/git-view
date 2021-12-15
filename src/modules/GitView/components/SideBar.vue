@@ -21,7 +21,7 @@
       >
         <li
           class="p-2 cursor-pointer"
-          :class="{ 'text-green-500': isCurrent }"
+          :class="{ 'text-green-500 font-semibold': isCurrent }"
           v-for="({ name, isCurrent }, index) in branchs"
           :key="index"
           @click="checkoutBranch(name)"

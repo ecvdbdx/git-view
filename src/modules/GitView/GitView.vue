@@ -6,7 +6,7 @@
         <p class="text-center absolute w-full text-align-middle py-4">
           {{ folderPath }}
         </p>
-        <div class="flex w-full h-full overflow-scroll">
+        <div ref="commitList" class="flex w-full h-full overflow-scroll">
           <div class="flex self-center relative">
             <CommitView
               v-for="(commit, index) in commits"
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useFolder } from '@/composables/useFolder';
@@ -51,10 +51,16 @@ export default {
       branchs,
     } = useGit();
 
+    const commitList = ref(null);
+
     onBeforeMount(() => {
       if (!folderPath.value) router.push('/');
       getCommits();
       getBranchs();
+    });
+
+    onMounted(() => {
+      commitList.value.scrollLeft = commitList.value.scrollWidth;
     });
 
     return {
@@ -64,6 +70,7 @@ export default {
       checkoutBranch,
       headCommitSha,
       folderPath,
+      commitList,
     };
   },
 };
