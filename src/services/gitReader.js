@@ -19,10 +19,14 @@ export default class GitReader {
       .reverse();
   }
   branchsParser(branchList) {
-    return branchList.split('\n').map((branch) => ({
-      name: branch.replace('*', '').trim(),
-      isCurrent: branch.includes('*'),
-    }));
+    return branchList
+      .split('\n')
+      .map((branch) => ({
+        name: branch.replace('*', '').trim(),
+        isCurrent: branch.includes('*'),
+      }))
+      .reverse()
+      .filter(({ name }) => name);
   }
 
   /**
