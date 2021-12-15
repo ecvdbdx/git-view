@@ -30,7 +30,7 @@
         </li>
       </ul>
       <div class="w-full flex h-full overflow-scroll">
-        <div class="flex self-center line relative">
+        <div class="flex self-center relative">
           <CommitView
             v-for="(commit, index) in commits"
             :key="index"
@@ -83,15 +83,4 @@ export default {
 };
 </script>
 
-<style>
-.line::before {
-  content: '';
-  height: 2px;
-  width: 100%;
-  background-color: black;
-  position: absolute;
-  top: 40%;
-  z-index: -1;
-  transform: translate(-1rem, 0px);
-}
-</style>
+<style></style>
