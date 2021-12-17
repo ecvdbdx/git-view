@@ -20,11 +20,11 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron';
 import { onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { CommitView } from './components';
+import { getGitLogs } from './services/gitView';
 
 export default {
   name: 'GitViewModule',
@@ -39,14 +39,14 @@ export default {
 
     const commits = ref([]);
 
-    const resolveGetGitLogs = () => {
-      ipcRenderer.on('getGitLogs-reply', (event, args) => {
-        commits.value = args;
-      });
-    };
-    resolveGetGitLogs();
     onBeforeMount(() => {
-      ipcRenderer.send('getGitLogs-event', props.folderPath);
+      getGitLogs(props.folderPath)
+        .then((commitsArray) => {
+          commits.value = commitsArray;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     });
 
     return { commits, folderPath };
