@@ -7,39 +7,35 @@
       Sélectionnez un dossier contenant un repository git.
     </p>
     <div class="mt-4">
-      <DsButton @click="handleClick()"> Selectionner un dossier </DsButton>
+      <DsButton @click="onButtonClick()"> Selectionner un dossier </DsButton>
       <p class="mt-2 text-sm text-red-500 text-center">
-        {{ folderServiceResponse }}
+        {{ folderPathError }}
       </p>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { onMounted } from '@vue/runtime-core';
 import { useRouter } from 'vue-router';
 
-import { getFolderPath } from './services/home';
+import { useFolder } from '@/composables/useFolder';
 
 export default {
   setup() {
+    const { getFolderPath, registerGetFolderEvent, folderPathError } =
+      useFolder();
     const router = useRouter();
-    const folderServiceResponse = ref('');
 
-    const handleClick = () => {
-      getFolderPath()
-        .then((folderPath) => {
-          router.push({
-            name: 'GitView',
-            query: { folderPath: folderPath },
-          });
-        })
-        .catch((error) => {
-          folderServiceResponse.value = error;
-        });
+    const onButtonClick = async () => {
+      getFolderPath();
     };
 
-    return { handleClick, folderServiceResponse };
+    onMounted(() => {
+      registerGetFolderEvent(router);
+    });
+
+    return { onButtonClick, folderPathError };
   },
 };
 </script>
