@@ -40,6 +40,15 @@ async function createWindow() {
   }
   // Initialize events
   CustomEvents.forEach(({ name, fct }) => ipcMain.on(name, fct(win)));
+
+  autoUpdater.on('update-available', () => {
+    win.webContents.send('update_available');
+    console.log('update-available');
+  });
+  autoUpdater.on('update-downloaded', () => {
+    win.webContents.send('update_downloaded');
+    console.log('update-downloaded');
+  });
 }
 
 // Quit when all windows are closed.
