@@ -1,14 +1,27 @@
 <template>
-  <div class="px-4 text-center relative">
+  <div class="flex-col justify-center">
     <CommitModal :is-open="isOpen" :commit="commit" @on-checkout="onCheckout" />
     <div
-      class="bg-gray-300 rounded-1/2 w-24 h-24"
-      :class="{ 'border-4 border-green-500': isHead }"
+      class="
+        dot-wrapper
+        bg-gray-400
+        rounded-1/2
+        w-16
+        h-16
+        border-4 border-gray-700
+        ml-4
+        mr-4
+        mb-2
+      "
+      :class="{ 'bg-indigo-400 border-indigo-700': isHead }"
       @click="isOpen = !isOpen"
     ></div>
-    <p class="pt-2">{{ sha }}</p>
 
-    <p class="pt-2" v-if="isHead">HEAD</p>
+    <div>
+      <p class="pl-4">{{ sha }}</p>
+    </div>
+
+    <p class="pl-4" v-if="isHead">HEAD</p>
   </div>
 </template>
 
@@ -53,3 +66,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.dot-wrapper {
+  position: relative;
+}
+.dot-wrapper::after {
+  content: '';
+  z-index: -1;
+  width: calc(100% + 2rem);
+  left: calc(-50% - 2rem);
+  transform: translateY(-50%);
+  @apply absolute bg-gray-700 top-1/2 h-1;
+}
+</style>

@@ -7,8 +7,8 @@
       </div>
       <div />
     </div>
-    <div class="w-full flex h-full">
-      <div class="flex self-center line relative">
+    <div class="w-full flex h-full relative">
+      <div class="flex self-center">
         <CommitView
           v-for="(commit, index) in commits"
           :key="index"
@@ -20,10 +20,11 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron';
 import { onBeforeMount, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 import { CommitView } from './components';
+import { getGitLogs } from './services/gitView';
 
 export default {
   name: 'GitViewModule',
@@ -32,40 +33,25 @@ export default {
     CommitView,
   },
 
-  props: {
-    folderPath: {
-      type: String,
-      required: true,
-    },
-  },
-
   setup(props) {
+    const route = useRoute();
+    const { folderPath } = route.query;
+
     const commits = ref([]);
 
-    const resolveGetGitLogs = () => {
-      ipcRenderer.on('getGitLogs-reply', (event, args) => {
-        commits.value = args;
-      });
-    };
-    resolveGetGitLogs();
     onBeforeMount(() => {
-      ipcRenderer.send('getGitLogs-event', props.folderPath);
+      getGitLogs(props.folderPath)
+        .then((commitsArray) => {
+          commits.value = commitsArray;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     });
 
-    return { commits };
+    return { commits, folderPath };
   },
 };
 </script>
 
-<style>
-.line::before {
-  content: '';
-  height: 2px;
-  width: 100%;
-  background-color: black;
-  position: absolute;
-  top: 40%;
-  z-index: -1;
-  transform: translate(-1rem, 0px);
-}
-</style>
+<style></style>

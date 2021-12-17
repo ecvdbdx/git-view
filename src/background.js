@@ -58,9 +58,14 @@ async function createWindow() {
 
   ipcMain.on(GET_GIT_LOGS_EVENT, (event, folderPath) => {
     const gitReader = new GitReader();
-    gitReader.getGitLogs(folderPath, 10).then((commitArray) => {
-      event.reply(GET_GIT_LOGS_REPLY, commitArray);
-    });
+    gitReader
+      .getGitLogs(folderPath, 10)
+      .then((commitArray) => {
+        event.reply(GET_GIT_LOGS_REPLY, commitArray);
+      })
+      .catch((error) => {
+        event.reply(GET_GIT_LOGS_REPLY, error);
+      });
   });
 }
 
