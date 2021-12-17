@@ -2,6 +2,10 @@
   "name": "git-view",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ecvdbdx/git-view.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -16,6 +20,7 @@
   "main": "background.js",
   "dependencies": {
     "core-js": "^3.6.5",
+    "update-electron-app": "^2.0.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.12"
   },
