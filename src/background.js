@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow, ipcMain, protocol } from 'electron';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
+import { autoUpdater } from 'electron-updater';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 
 import CustomEvents from './events';
@@ -35,6 +36,7 @@ async function createWindow() {
     createProtocol('app');
     // Load the index.html when not in development
     win.loadURL('app://./index.html');
+    autoUpdater.checkForUpdatesAndNotify();
   }
   // Initialize events
   CustomEvents.forEach(({ name, fct }) => ipcMain.on(name, fct(win)));
