@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-5">
     <h2 class="text-2xl font-bold text-green-500 text-center">Last projects</h2>
     <h3 v-if="projectList.error" class="text-xl text-red-500 text-center">
       {{ projectList.message }}
@@ -21,8 +21,9 @@ export default {
   components: { ProjectHistoryItem },
   props: {
     projectList: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      required: true,
+      default: () => {},
     },
   },
 };

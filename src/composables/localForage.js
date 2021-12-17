@@ -16,7 +16,10 @@ const storeHistory = async (project) => {
 const getProjectsHistory = () => {
   return localforage.getItem('projectsHistory').then((projectsHistory) => {
     if (projectsHistory === null) {
-      return { error: true, message: 'You have not yet selected any projects' };
+      return {
+        error: true,
+        message: ['You have not yet selected any projects'],
+      };
     }
     return { error: false, message: projectsHistory };
   });
