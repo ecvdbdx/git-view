@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
 
 export default class GitReader {
-  parser(gitString) {
+  commitsParser(gitString) {
     return gitString
       .split('\n')
       .map((commit) => {
@@ -36,19 +36,14 @@ export default class GitReader {
    */
   execGit(path, command) {
     return new Promise((resolve, reject) => {
-      exec(
-        `git log origin --max-count=${nbCommit} --pretty='format:%h$$%s$$%cd$$%an$$%d'`,
-        { cwd: path },
-        (err, stdout) => {
-          if (err) {
-            return reject(err);
-          }
-          resolve(this.parser(stdout));
+      exec(command, { cwd: path }, (err, stdout) => {
+        if (err) {
+          return reject(err);
         }
         resolve(stdout);
+      });
     });
-  });
-}
+  }
 
   /**
    * @param {string} path - Path of the git folder
@@ -56,16 +51,22 @@ export default class GitReader {
    * @returns {Promise <Array>}
    */
   async getGitLogs(path, nbCommit = 10) {
-  const commandResponse = await this.execGit(
-    path,
-    `git log --max-count=${nbCommit} --pretty='format:%h$$%s$$%cd$$%an$$%d'`
-  );
+    const commandResponse = await this.execGit(
+      path,
+      `git log --max-count=${nbCommit} --pretty='format:%h$$%s$$%cd$$%an$$%d'`
+    );
 
-  return this.commitsParser(commandResponse);
-}
+    return this.commitsParser(commandResponse);
+  }
 
-{
-}
+  /**
+   * @param {string} path - Path of the git folder
+   * @returns Promise of Array
+   */
+  async getGitBranchs(path) {
+    const commandResponse = await this.execGit(path, 'git branch');
+    return this.branchsParser(commandResponse);
+  }
 
   /**
    * @param {string} path - Path of the git folder
@@ -73,14 +74,14 @@ export default class GitReader {
    * @returns {void}
    */
   async checkoutBranch(path, branch) {
-  await this.execGit(path, `git checkout ${branch}`);
-}
+    await this.execGit(path, `git checkout ${branch}`);
+  }
 
   /**
    * @param {string} path - Path of the git folder
    * @returns {void}
    */
   async fetchAllGit(path) {
-  await this.execGit(path, 'git fetch --all');
-}
+    await this.execGit(path, 'git fetch --all');
+  }
 }
