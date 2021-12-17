@@ -6,11 +6,7 @@ const storeHistory = async (project) => {
       localforage.setItem('projectsHistory', [project]);
     } else {
       if (!checkFolderPathExist(projectsHistory, project)) {
-        if (projectsHistory.length === 4) {
-          projectsHistory[0] = project;
-        } else {
-          projectsHistory.push(project);
-        }
+        handleHistoryLenght(projectsHistory, project);
         localforage.setItem('projectsHistory', projectsHistory);
       }
     }
@@ -28,6 +24,14 @@ const getProjectsHistory = () => {
 
 const checkFolderPathExist = (projectsHistory, folderPath) => {
   return projectsHistory.includes(folderPath);
+};
+
+const handleHistoryLenght = (projectsHistory, project) => {
+  if (projectsHistory.length === 4) {
+    projectsHistory[0] = project;
+  } else {
+    projectsHistory.push(project);
+  }
 };
 
 export const localForage = () => ({
