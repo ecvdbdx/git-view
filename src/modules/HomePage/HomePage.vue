@@ -12,30 +12,42 @@
         {{ folderPathError }}
       </p>
     </div>
+    <ProjectHistoryList :project-list="projectsHistory" />
   </div>
 </template>
 
 <script>
-import { onMounted } from '@vue/runtime-core';
+import { onMounted, ref } from '@vue/runtime-core';
 import { useRouter } from 'vue-router';
 
+import { localForage } from '@/composables/localForage';
 import { useFolder } from '@/composables/useFolder';
 
+import { ProjectHistoryList } from './components';
+
 export default {
+  components: { ProjectHistoryList },
   setup() {
     const { getFolderPath, registerGetFolderEvent, folderPathError } =
       useFolder();
+
+    const { getProjectsHistory } = localForage();
     const router = useRouter();
+    const projectsHistory = ref();
 
     const onButtonClick = async () => {
       getFolderPath();
     };
 
+    getProjectsHistory().then((res) => {
+      projectsHistory.value = res;
+    });
+
     onMounted(() => {
       registerGetFolderEvent(router);
     });
 
-    return { onButtonClick, folderPathError };
+    return { onButtonClick, folderPathError, projectsHistory };
   },
 };
 </script>

@@ -19,7 +19,6 @@ const headCommitSha = computed({
 });
 
 const getCommits = () => {
-  console.log(folderPath.value);
   ipcRenderer.send('getGitLogs-event', folderPath.value);
   ipcRenderer.on('getGitLogs-reply', (event, commitList) => {
     commits.value = commitList;
