@@ -101,6 +101,7 @@ app.on('ready', async () => {
     }
   }
   createWindow();
+  autoUpdater.checkForUpdates();
 });
 
 // Exit cleanly on request from parent process in development mode.
