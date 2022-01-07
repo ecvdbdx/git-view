@@ -2,6 +2,8 @@
 
 import { app, BrowserWindow, ipcMain, protocol } from 'electron';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
+import log from 'electron-log';
+import { autoUpdater } from 'electron-updater';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 
 import CustomEvents from './events';
@@ -38,6 +40,37 @@ async function createWindow() {
   }
   // Initialize events
   CustomEvents.forEach(({ name, fct }) => ipcMain.on(name, fct(win)));
+  function sendStatusToWindow(text) {
+    log.info(text);
+    win.webContents.send('message', text);
+  }
+  autoUpdater.on('checking-for-update', () => {
+    sendStatusToWindow('Checking for update...');
+  });
+  autoUpdater.on('update-available', () => {
+    sendStatusToWindow('Update available.');
+  });
+  autoUpdater.on('update-not-available', () => {
+    sendStatusToWindow('Update not available.');
+  });
+  autoUpdater.on('error', (err) => {
+    sendStatusToWindow('Error in auto-updater. ' + err);
+  });
+  autoUpdater.on('download-progress', (progressObj) => {
+    let log_message = 'Download speed: ' + progressObj.bytesPerSecond;
+    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+    log_message =
+      log_message +
+      ' (' +
+      progressObj.transferred +
+      '/' +
+      progressObj.total +
+      ')';
+    sendStatusToWindow(log_message);
+  });
+  autoUpdater.on('update-downloaded', () => {
+    sendStatusToWindow('Update downloaded');
+  });
 }
 
 // Quit when all windows are closed.
