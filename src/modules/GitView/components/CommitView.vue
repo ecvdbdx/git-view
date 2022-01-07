@@ -1,22 +1,46 @@
 <template>
-  <div class="px-4 text-center">
-    <div class="dot-wrapper flex justify-center">
-      <div
-        class="bg-gray-400 rounded-1/2 w-8 h-8 border-4 border-gray-700"
-        :class="{ 'bg-indigo-400 border-indigo-700': isHead }"
-      ></div>
+  <div class="flex-col justify-center">
+    <CommitModal
+      v-if="isOpen"
+      :commit="commit"
+      @on-checkout="onCheckout"
+      @on-close="isOpen = false"
+    />
+    <div
+      class="
+        dot-wrapper
+        bg-gray-400
+        rounded-1/2
+        w-16
+        h-16
+        border-4 border-gray-700
+        ml-4
+        mr-4
+        mb-2
+      "
+      :class="{ 'bg-indigo-400 border-indigo-700': isHead }"
+      @click="isOpen = !isOpen"
+    ></div>
+
+    <div>
+      <p class="pl-4">{{ sha }}</p>
     </div>
-    <p class="pt-2">{{ sha }}</p>
-    <p class="pt-2">{{ author }}</p>
-    <p class="pt-2" v-if="isHead">HEAD</p>
+
+    <p class="pl-4" v-if="isHead">HEAD</p>
   </div>
 </template>
 
 <script>
-import { computed } from '@vue/reactivity';
+import { computed, ref } from '@vue/reactivity';
+
+import CommitModal from './CommitModal.vue';
 
 export default {
   name: 'CommitView',
+
+  components: {
+    CommitModal,
+  },
 
   props: {
     commit: {
@@ -29,11 +53,16 @@ export default {
     const sha = computed(() => props.commit.sha);
     const author = computed(() => props.commit.author);
     const isHead = computed(() => props.commit.isHead);
+    const message = computed(() => props.commit.message);
+
+    const isOpen = ref(false);
 
     return {
       sha,
       author,
       isHead,
+      message,
+      isOpen,
     };
   },
 };
