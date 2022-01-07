@@ -6,21 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Git View, learn by exploring you repo</title>
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
-    <script src="https://cdn-tailwindcss.vercel.app/"></script>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
-    <header
-      class="
-        bg-white
-        flex
-        items-center
-        justify-between
-        container
-        mx-auto
-        px-24
-        py-2
-      "
-    >
+  <body class="container lg:max-w-6xl md:max-w-2xl max-w-md px-5 mx-auto">
+    <header class="bg-white flex items-center justify-between py-2">
       <a href="#" class="flex gap-3 items-center">
         <img src="assets/favicon.ico" height="50" width="50" />
         <div>
@@ -30,8 +19,10 @@
       </a>
 
       <nav class="flex items-center gap-6">
-        <a href="" class="font-bold">Features</a>
-        <a href="" class="font-bold">Contribute</a>
+        <div class="hidden md:flex gap-3">
+          <a href="" class="font-bold text-gray-700">Features</a>
+          <a href="" class="font-bold text-gray-700">Contribute</a>
+        </div>
 
         <a
           href=""
@@ -42,13 +33,12 @@
     </header>
 
     <main>
-      <section class="bg-white text-center">
+      <section class="text-center">
         <div
           class="
-            container
-            px-24
-            mx-auto
             h-[45vh]
+            max-w-lg
+            mx-auto
             flex
             items-center
             flex-col
@@ -69,6 +59,8 @@
                 bg-green-500
                 text-white
                 mr-3
+                mb-2
+                inline-block
                 font-bold
                 px-6
                 py-3
@@ -81,14 +73,22 @@
             <a
               href="https://github.com/ecvdbdx/git-view"
               target="_blank"
-              class="bg-green-100 text-green-500 font-bold px-6 py-3 rounded-md"
+              class="
+                bg-green-100
+                text-green-500
+                inline-block
+                font-bold
+                px-6
+                py-3
+                rounded-md
+              "
               >Contribute</a
             >
           </div>
         </div>
-        <div class="container mx-auto">
+        <div>
           <img
-            class="rounded-lg block mt-24"
+            class="rounded-lg block mt-24 h-auto max-w-full"
             src="assets/gitview-screenshot.png"
             alt="git view screenshot"
           />
@@ -96,18 +96,7 @@
       </section>
 
       <section>
-        <div
-          class="
-            container
-            px-6
-            py-20
-            mx-auto
-            grid
-            md:grid-cols-2
-            gap-6
-            place-content-evenly
-          "
-        >
+        <div class="py-20 grid md:grid-cols-2 gap-6 place-content-evenly">
           <div>
             <div
               class="
@@ -157,19 +146,8 @@
       </section>
 
       <section>
-        <div
-          class="
-            container
-            px-6
-            mx-auto
-            grid
-            md:grid-cols-2
-            gap-6
-            place-content-evenly
-            py-20
-          "
-        >
-          <div>
+        <div class="grid md:grid-cols-2 gap-6 place-content-evenly py-20">
+          <div class="order-last md:order-none">
             <img
               src="assets/146561740-be34108f-cdbf-41c3-b758-964717f3f78e.png"
               alt=""
@@ -232,7 +210,11 @@
       </section>
     </main>
 
-    <footer></footer>
+    <footer class="text-center py-4">
+      <p class="text-gray-400 text-sm">
+        2021 ECV Digital. Illustration by Undraw.
+      </p>
+    </footer>
 
     <script>
       const downloadBtn = document.querySelector('#download-btn');
