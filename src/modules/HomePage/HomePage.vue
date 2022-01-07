@@ -20,7 +20,7 @@
 import { onMounted, ref } from '@vue/runtime-core';
 import { useRouter } from 'vue-router';
 
-import { localForage } from '@/composables/localForage';
+import { useLocalForage } from '@/composables/localForage';
 import { useFolder } from '@/composables/useFolder';
 
 import { ProjectHistoryList } from './components';
@@ -31,7 +31,7 @@ export default {
     const { getFolderPath, registerGetFolderEvent, folderPathError } =
       useFolder();
 
-    const { getProjectsHistory } = localForage();
+    const { getProjectsHistory } = useLocalForage();
     const router = useRouter();
     const projectsHistory = ref();
 
@@ -40,7 +40,6 @@ export default {
     };
 
     getProjectsHistory().then((res) => {
-      console.log(res);
       projectsHistory.value = res;
     });
 

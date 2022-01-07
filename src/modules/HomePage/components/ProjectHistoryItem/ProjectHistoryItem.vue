@@ -37,7 +37,6 @@ export default {
     const { setFolderPath } = useFolder();
     const router = useRouter();
     const handleClick = () => {
-      console.log(props.projectPath);
       setFolderPath(props.projectPath);
       router.push({
         name: 'GitView',

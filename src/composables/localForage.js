@@ -37,7 +37,7 @@ const handleHistoryLenght = (projectsHistory, project) => {
   }
 };
 
-export const localForage = () => ({
+export const useLocalForage = () => ({
   getProjectsHistory,
   storeHistory,
 });

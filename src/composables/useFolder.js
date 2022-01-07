@@ -1,11 +1,11 @@
 import { ipcRenderer } from 'electron';
 import { ref } from 'vue';
 
-import { localForage } from './localForage';
+import { useLocalForage } from './localForage';
 
 const folderPath = ref('');
 const folderPathError = ref('');
-const { storeHistory } = localForage();
+const { storeHistory } = useLocalForage();
 
 const registerGetFolderEvent = (router) => {
   ipcRenderer.on('getFolderPath-reply', (event, args) => {
