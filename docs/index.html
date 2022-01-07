@@ -19,14 +19,22 @@
       </a>
 
       <nav class="flex items-center gap-6">
-        <div class="hidden md:flex gap-3">
-          <a href="" class="font-bold text-gray-700">Features</a>
-          <a href="" class="font-bold text-gray-700">Contribute</a>
-        </div>
+        <!-- <div class="hidden md:flex gap-3">
+          <a href="" class="font-bold text-gray-500">Features</a> 
+          <a href="" class="font-bold text-gray-500">Contribute</a>
+        </div> -->
 
         <a
-          href=""
-          class="bg-green-100 text-green-500 font-bold px-6 py-3 rounded-md"
+          class="
+            download-btn
+            bg-green-100
+            text-green-500
+            font-bold
+            px-6
+            py-3
+            rounded-md
+          "
+          download
           >Download app</a
         >
       </nav>
@@ -54,8 +62,8 @@
           </p>
           <div>
             <a
-              id="download-btn"
               class="
+                download-btn
                 bg-green-500
                 text-white
                 mr-3
@@ -66,7 +74,6 @@
                 py-3
                 rounded-md
               "
-              href="#"
               download
               >Download now</a
             >
@@ -217,18 +224,27 @@
     </footer>
 
     <script>
-      const downloadBtn = document.querySelector('#download-btn');
-      let link = '';
-      const macLink =
-        'https://github.com/ecvdbdx/git-view/releases/download/v0.2.0/git-view-0.2.0.dmg';
-      const windowLink =
-        'https://github.com/ecvdbdx/git-view/releases/download/v0.2.0/git-view-0.2.0.exe';
+      const downloadBtns = document.querySelectorAll('.download-btn');
 
-      let os = '';
-      if (navigator.appVersion.indexOf('Win') != -1) link = windowLink;
-      if (navigator.appVersion.indexOf('Mac') != -1) link = macLink;
+      fetch('https://api.github.com/repos/ecvdbdx/git-view/tags')
+        .then((data) => data.json())
+        .then((tags) => {
+          const tagVersion = tags[0].name.slice(1);
 
-      downloadBtn.setAttribute('href', link);
+          const links = {
+            window: `https://github.com/ecvdbdx/git-view/releases/latest/download/git-view-${tagVersion}.dmg`,
+            mac: `https://github.com/ecvdbdx/git-view/releases/latest/download/git-view-Setup-${tagVersion}.exe`,
+          };
+
+          new Array(...downloadBtns).forEach((btn) => {
+            btn.setAttribute(
+              'href',
+              navigator.appVersion.indexOf('Mac') != -1
+                ? links.window
+                : links.mac
+            );
+          });
+        });
     </script>
   </body>
 </html>
