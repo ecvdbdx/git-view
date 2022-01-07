@@ -12,7 +12,6 @@
               v-for="(commit, index) in commits"
               :key="index"
               :commit="commit"
-              @click="checkoutCommit(commit.sha)"
             />
           </div>
         </div>
@@ -44,7 +43,6 @@ export default {
     const {
       getCommits,
       getBranchs,
-      checkoutCommit,
       checkoutBranch,
       headCommitSha,
       commits,
@@ -66,7 +64,6 @@ export default {
     return {
       commits,
       branchs,
-      checkoutCommit,
       checkoutBranch,
       headCommitSha,
       folderPath,

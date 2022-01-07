@@ -1,18 +1,13 @@
 <template>
   <div class="flex-col justify-center">
-    <CommitModal :is-open="isOpen" :commit="commit" @on-checkout="onCheckout" />
+    <CommitModal
+      v-if="isOpen"
+      :commit="commit"
+      @on-checkout="onCheckout"
+      @on-close="isOpen = false"
+    />
     <div
-      class="
-        dot-wrapper
-        bg-gray-400
-        rounded-1/2
-        w-16
-        h-16
-        border-4 border-gray-700
-        ml-4
-        mr-4
-        mb-2
-      "
+      class="dot-wrapper bg-gray-400 rounded-1/2 w-16 h-16 border-4 border-gray-700 ml-4 mr-4 mb-2"
       :class="{ 'bg-indigo-400 border-indigo-700': isHead }"
       @click="isOpen = !isOpen"
     ></div>

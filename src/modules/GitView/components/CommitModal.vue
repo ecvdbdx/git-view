@@ -1,15 +1,13 @@
 <template>
-  <div class="absolute top-20">
+  <div class="absolute top-20" ref="modalContainer">
     <div
-      class="border-black p-4 w-40 max-h-250px h-200px w-300px bg-red-500"
-      v-if="isOpen"
-      @click="away(isOpen)"
+      class="border-black border-solid border-width-2 p-4 w-40 max-h-250px h-200px w-300px bg-white"
     >
       <p>{{ message }}</p>
       <p>
         Author : <b>{{ author }}</b>
       </p>
-      <DsButton @click="$emit('onCheckout', sha)" class="mb-4 mt-4">
+      <DsButton @click="checkoutCommit(sha)" class="mb-4 mt-4">
         Checkout
       </DsButton>
     </div>
@@ -17,38 +15,39 @@
 </template>
 
 <script>
-import { computed } from '@vue/reactivity';
+import { computed, ref } from '@vue/reactivity';
+import { onClickOutside } from '@vueuse/core';
+
+import { useGit } from '@/composables/useGit';
 
 export default {
   name: 'CommitModal',
 
   props: {
-    isOpen: {
-      type: Boolean,
-      default: false,
-    },
     commit: {
       type: Object,
       required: true,
     },
   },
 
-  emits: ['onCheckout'],
+  emits: ['onClose'],
 
-  setup(props) {
-    const away = (trigger) => {
-      const reversedTrigger = !trigger;
-      return reversedTrigger;
-    };
+  setup(props, { emit }) {
+    const { checkoutCommit } = useGit();
+
     const author = computed(() => props.commit.author);
     const message = computed(() => props.commit.message);
     const sha = computed(() => props.commit.sha);
+
+    const modalContainer = ref(null);
+    onClickOutside(modalContainer, () => emit('onClose'));
 
     return {
       author,
       message,
       sha,
-      away,
+      checkoutCommit,
+      modalContainer,
     };
   },
 };
