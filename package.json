@@ -1,6 +1,6 @@
 {
   "name": "git-view",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "private": true,
   "repository": {
     "type": "git",
@@ -10,12 +10,13 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
+    "electron:build": "vue-cli-service electron:build -w -m",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "prepare": "husky install",
-    "test": "jest"
+    "test": "jest",
+    "gh-publish": "vue-cli-service electron:build -w -m -p always"
   },
   "main": "background.js",
   "dependencies": {
