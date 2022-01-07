@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from '@vue/runtime-core';
+import { onBeforeMount, onMounted, ref } from '@vue/runtime-core';
 import { useRouter } from 'vue-router';
 
 import { useLocalForage } from '@/composables/localForage';
@@ -33,14 +33,16 @@ export default {
 
     const { getProjectsHistory } = useLocalForage();
     const router = useRouter();
-    const projectsHistory = ref();
+    const projectsHistory = ref({});
 
     const onButtonClick = async () => {
       getFolderPath();
     };
 
-    getProjectsHistory().then((res) => {
-      projectsHistory.value = res;
+    onBeforeMount(() => {
+      getProjectsHistory().then((res) => {
+        projectsHistory.value = res;
+      });
     });
 
     onMounted(() => {
