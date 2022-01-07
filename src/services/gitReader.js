@@ -47,15 +47,13 @@ export default class GitReader {
 
   /**
    * @param {string} path - Path of the git folder
-   * @param {number} nbCommit - Number of commit
    * @returns {Promise <Array>}
    */
-  async getGitLogs(path, nbCommit = 10) {
+  async getGitLogs(path) {
     const commandResponse = await this.execGit(
       path,
-      `git log --max-count=${nbCommit} --pretty='format:%h$$%s$$%cd$$%an$$%d'`
+      `git log --pretty='format:%h$$%s$$%cd$$%an$$%d'`
     );
-
     return this.commitsParser(commandResponse);
   }
 

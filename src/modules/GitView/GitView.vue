@@ -52,6 +52,9 @@ export default {
     } = useGit();
 
     const commitList = ref(null);
+    const commitsLength = commits._rawValue.length;
+    const offset = ref(0);
+    const limit = 10;
 
     onBeforeMount(() => {
       if (!folderPath.value) router.push('/');
@@ -71,6 +74,9 @@ export default {
       headCommitSha,
       folderPath,
       commitList,
+      commitsLength,
+      offset,
+      limit,
     };
   },
 };
