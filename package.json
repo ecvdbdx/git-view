@@ -1,6 +1,6 @@
 {
   "name": "git-view",
-  "version": "0.5.10",
+  "version": "0.5.16",
   "private": true,
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "core-js": "^3.6.5",
     "localforage": "^1.10.0",
     "electron-log": "^4.4.4",
+    "electron-simple-updater": "^2.0.11",
     "electron-updater": "^4.6.1",
     "update-electron-app": "^2.0.1",
     "vue": "^3.0.0",
