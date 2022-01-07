@@ -1,5 +1,4 @@
 <template>
-  <p>0.5.10</p>
   <router-view />
 </template>
 
