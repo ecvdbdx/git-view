@@ -9,7 +9,7 @@
         <div ref="commitList" class="flex w-full h-full overflow-scroll">
           <div class="flex self-center relative">
             <CommitView
-              v-for="(commit, index) in commits"
+              v-for="(commit, index) in commits.commits"
               :key="index"
               :commit="commit"
               @click="checkoutCommit(commit.sha)"
@@ -18,6 +18,8 @@
         </div>
       </div>
     </div>
+    <button :disabled="!prevIsActive" @click="prev">prev</button>
+    <button :disabled="!nextIsActive" @click="next">next</button>
   </div>
 </template>
 
@@ -49,12 +51,13 @@ export default {
       headCommitSha,
       commits,
       branchs,
+      getGitLogsByOffset,
     } = useGit();
 
     const commitList = ref(null);
-    const commitsLength = commits._rawValue.length;
-    const offset = ref(0);
-    const limit = 10;
+    const offset = ref(commits.value.totalCommits - 10);
+    const prevIsActive = ref(true);
+    const nextIsActive = ref(false);
 
     onBeforeMount(() => {
       if (!folderPath.value) router.push('/');
@@ -66,6 +69,30 @@ export default {
       commitList.value.scrollLeft = commitList.value.scrollWidth;
     });
 
+    const next = () => {
+      offset.value += 10;
+      if (offset.value + 10 >= commits.value.totalCommits) {
+        nextIsActive.value = false;
+        prevIsActive.value = true;
+      } else {
+        prevIsActive.value = true;
+        nextIsActive.value = true;
+      }
+      getGitLogsByOffset(offset.value);
+    };
+
+    const prev = () => {
+      offset.value -= 10;
+      if (offset.value < 0) {
+        offset.value = 0;
+        prevIsActive.value = false;
+      } else {
+        prevIsActive.value = true;
+        nextIsActive.value = true;
+      }
+      getGitLogsByOffset(offset.value);
+    };
+
     return {
       commits,
       branchs,
@@ -74,9 +101,11 @@ export default {
       headCommitSha,
       folderPath,
       commitList,
-      commitsLength,
       offset,
-      limit,
+      next,
+      prev,
+      nextIsActive,
+      prevIsActive,
     };
   },
 };

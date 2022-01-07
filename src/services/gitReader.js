@@ -1,6 +1,11 @@
 import { exec } from 'child_process';
 
 export default class GitReader {
+  constructor() {
+    this.commitList = [];
+    this.totalCommit = 0;
+  }
+
   commitsParser(gitString) {
     return gitString
       .split('\n')
@@ -54,7 +59,24 @@ export default class GitReader {
       path,
       `git log --pretty='format:%h$$%s$$%cd$$%an$$%d'`
     );
-    return this.commitsParser(commandResponse);
+
+    this.commitList = this.commitsParser(commandResponse);
+    this.totalCommit = this.commitList.length;
+
+    return this.getGitLogsByOffset(this.totalCommit - 10);
+  }
+
+  /**
+   * @param {number} offset - Offset of commits
+   * @param {number} limit - Number of commits to return
+   * @returns {Promise <Array>}
+   */
+  async getGitLogsByOffset(offset, limit = 10) {
+    const commitsByOffset = this.commitList.slice(offset, offset + limit);
+    return {
+      commits: commitsByOffset,
+      totalCommits: this.totalCommit,
+    };
   }
 
   /**
