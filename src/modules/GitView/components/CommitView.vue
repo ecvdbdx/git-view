@@ -1,11 +1,6 @@
 <template>
   <div class="flex-col justify-center">
-    <CommitModal
-      v-if="isOpen"
-      :commit="commit"
-      @on-checkout="onCheckout"
-      @on-close="isOpen = false"
-    />
+    <CommitModal v-if="isOpen" :commit="commit" @on-close="isOpen = false" />
     <div
       class="
         dot-wrapper
