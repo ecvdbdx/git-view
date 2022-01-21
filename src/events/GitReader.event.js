@@ -1,6 +1,8 @@
 import {
   GET_GIT_BRANCHS_EVENT,
   GET_GIT_BRANCHS_REPLY,
+  GET_GIT_LOGS_BY_OFFSET_EVENT,
+  GET_GIT_LOGS_BY_OFFSET_REPLY,
   GET_GIT_LOGS_EVENT,
   GET_GIT_LOGS_REPLY,
   GIT_CHECKOUT,
@@ -30,6 +32,14 @@ export default [
     fct: () => async (event, folderPath, target) => {
       gitReader.checkoutBranch(folderPath, target).catch((error) => {
         console.error(error);
+      });
+    },
+  },
+  {
+    name: GET_GIT_LOGS_BY_OFFSET_EVENT,
+    fct: () => (event, offset) => {
+      gitReader.getGitLogsByOffset(offset).then((commits) => {
+        event.reply(GET_GIT_LOGS_BY_OFFSET_REPLY, commits);
       });
     },
   },
