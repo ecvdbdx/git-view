@@ -19,14 +19,24 @@
       </a>
 
       <nav class="flex items-center gap-6">
-        <div class="hidden md:flex gap-3">
-          <a href="" class="font-bold text-gray-700">Features</a>
-          <a href="" class="font-bold text-gray-700">Contribute</a>
-        </div>
+        <!-- <div class="hidden md:flex gap-3">
+          <a href="" class="font-bold text-gray-500">Features</a> 
+          <a href="" class="font-bold text-gray-500">Contribute</a>
+        </div> -->
 
         <a
-          href=""
-          class="bg-green-100 text-green-500 font-bold px-6 py-3 rounded-md"
+          class="
+            download-btn
+            bg-green-100
+            text-green-500
+            font-bold
+            px-6
+            py-3
+            rounded-md
+            transition-transform
+            hover:scale-105
+          "
+          download
           >Download app</a
         >
       </nav>
@@ -43,39 +53,55 @@
             items-center
             flex-col
             justify-center
+            pt-16
           "
         >
           <h1 class="font-bold text-3xl mb-4 leading-[1.15]">
             Learn GIT by exploring your repos.
           </h1>
-          <p class="mb-10 text-gray-600">
-            Git View is an educational open source project developed by the web
-            development students at ECV Digital Bordeaux.
+          <p class="mb-10 text-gray-500">
+            Git View is an educationel open source project developed by the web
+            development students at ECV Digital.
           </p>
-          <div>
-            <a
-              id="download-btn"
-              class="
-                bg-green-500
-                text-white
-                mr-3
-                mb-2
-                inline-block
-                font-bold
-                px-6
-                py-3
-                rounded-md
-              "
-              href="#"
-              download
-              >Download now</a
-            >
+          <div
+            class="
+              flex flex-col
+              md:flex-row
+              justify-center
+              items-center
+              md:items-start
+            "
+          >
+            <div class="flex flex-col items-center mr-3 mb-2">
+              <a
+                class="
+                  download-btn
+                  bg-green-500
+                  text-white
+                  hover:scale-105
+                  transition-transform
+                  mb-1
+                  inline-block
+                  font-bold
+                  px-6
+                  py-3
+                  rounded-md
+                "
+                download
+                >Download now</a
+              >
+              <p class="inline-block text-gray-400 text-sm">
+                <span id="app-version"></span>
+              </p>
+            </div>
             <a
               href="https://github.com/ecvdbdx/git-view"
               target="_blank"
               class="
                 bg-green-100
                 text-green-500
+                hover:scale-105
+                transition-transform
                 inline-block
                 font-bold
                 px-6
@@ -217,18 +243,32 @@
     </footer>
 
     <script>
-      const downloadBtn = document.querySelector('#download-btn');
-      let link = '';
-      const macLink =
-        'https://github.com/ecvdbdx/git-view/releases/download/v0.2.0/git-view-0.2.0.dmg';
-      const windowLink =
-        'https://github.com/ecvdbdx/git-view/releases/download/v0.2.0/git-view-0.2.0.exe';
+      const downloadBtns = document.querySelectorAll('.download-btn');
+      const versionSpan = document.querySelector('#app-version');
 
-      let os = '';
-      if (navigator.appVersion.indexOf('Win') != -1) link = windowLink;
-      if (navigator.appVersion.indexOf('Mac') != -1) link = macLink;
+      fetch('https://api.github.com/repos/ecvdbdx/git-view/tags')
+        .then((data) => data.json())
+        .then((tags) => {
+          const tagVersion = tags[0].name.slice(1);
 
-      downloadBtn.setAttribute('href', link);
+          versionSpan.innerHTML = `${
+            navigator.appVersion.indexOf('Mac') != -1 ? '.dmg' : '.exe'
+          } - ${tags[0].name}`;
+
+          const links = {
+            mac: `https://github.com/ecvdbdx/git-view/releases/latest/download/git-view-${tagVersion}.dmg`,
+            window: `https://github.com/ecvdbdx/git-view/releases/latest/download/git-view-Setup-${tagVersion}.exe`,
+          };
+
+          new Array(...downloadBtns).forEach((btn) => {
+            btn.setAttribute(
+              'href',
+              navigator.appVersion.indexOf('Mac') != -1
+                ? links.mac
+                : links.window
+            );
+          });
+        });
     </script>
   </body>
 </html>
