@@ -25,4 +25,6 @@ jobs:
           prerelease: true
           files: |
             LICENSE.txt
-            *.jar
+            *.dmg
+            *.exe
+            *.yml
