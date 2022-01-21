@@ -12,7 +12,8 @@ const totalCommits = ref(0);
 const headCommitSha = computed({
   get: () => commits.value.find((commit) => commit.isHead)?.sha,
   set: (newValue) => {
-    commits.value.map((commit) => {
+    console.log(commits.value.commits);
+    commits.value.commits.map((commit) => {
       commit.isHead = commit.sha === newValue;
       return commit;
     });
