@@ -1,26 +1,28 @@
-name: 'Automatic pre-release'
+name: 'tagged-release'
 
 on:
   push:
-    branches:
-      - 'feat/#6/build-app'
+    tags:
+      - 'v*'
 
 jobs:
-  pre-release:
-    name: 'Pre Release'
+  tagged-release:
+    name: 'Tagged Release'
     runs-on: 'ubuntu-latest'
 
     steps:
-      - name: 'Build & test'
-        run: |
-          echo "done!"
+      - uses: actions/checkout@v2
+      - name: Test using Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - run: npm install
+      - run: npm run gh-publish
 
       - uses: 'marvinpinto/action-automatic-releases@latest'
         with:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
-          automatic_release_tag: 'latest'
           prerelease: true
-          title: 'Development Build'
           files: |
             LICENSE.txt
             *.jar
