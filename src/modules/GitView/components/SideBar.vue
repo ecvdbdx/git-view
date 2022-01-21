@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { useGit } from '@/composables/useGit';
 export default {
   name: 'SideBar',
 
@@ -44,7 +45,12 @@ export default {
     },
   },
 
-  setup() {},
+  setup() {
+    const { checkoutBranch } = useGit();
+    return {
+      checkoutBranch,
+    };
+  },
 };
 </script>
 
