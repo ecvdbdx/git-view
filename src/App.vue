@@ -5,15 +5,8 @@
 <script>
 import 'windi.css';
 
-import { useRouter } from 'vue-router';
-
 export default {
   name: 'App',
-  components: {},
-  setup() {
-    const router = useRouter();
-    router.push('/');
-  },
 };
 </script>
 
