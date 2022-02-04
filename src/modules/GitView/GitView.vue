@@ -6,13 +6,22 @@
         <p class="text-center absolute w-full text-align-middle py-4">
           {{ folderPath }}
         </p>
-        <div ref="commitList" class="flex w-full h-full overflow-scroll">
-          <div class="flex self-center relative">
-            <CommitView
-              v-for="(commit, index) in commits.commits"
-              :key="index"
-              :commit="commit"
-            />
+        <div
+          ref="commitList"
+          class="flex flex-col w-full h-full overflow-scroll justify-between"
+        >
+          <div class="flex items-end h-1/2">
+            <div class="flex relative">
+              <CommitView
+                v-for="(commit, index) in commits"
+                :key="index"
+                :commit="commit"
+                :prev-commit="index - 1 >= 0 ? commits[index - 1] : null"
+              />
+            </div>
+          </div>
+          <div class="h-2/5">
+            <CommitDetails :files="files" />
           </div>
         </div>
       </div>
@@ -29,7 +38,7 @@ import { useRouter } from 'vue-router';
 import { useFolder } from '@/composables/useFolder';
 import { useGit } from '@/composables/useGit';
 
-import { CommitView, SideBar } from './components';
+import { CommitDetails, CommitView, SideBar } from './components';
 
 export default {
   name: 'GitViewModule',
@@ -37,6 +46,7 @@ export default {
   components: {
     CommitView,
     SideBar,
+    CommitDetails,
   },
 
   setup() {
@@ -50,6 +60,7 @@ export default {
       commits,
       branchs,
       getGitLogsByOffset,
+      files,
     } = useGit();
 
     const commitList = ref(null);
@@ -103,6 +114,7 @@ export default {
       prev,
       nextIsActive,
       prevIsActive,
+      files,
     };
   },
 };
