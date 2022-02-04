@@ -7,7 +7,6 @@ import 'windi.css';
 
 export default {
   name: 'App',
-  components: {},
 };
 </script>
 
