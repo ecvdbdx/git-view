@@ -106,6 +106,33 @@ export default class GitReader {
   }
 
   async getGitDiff(path, commit) {
-    console.log(path, commit);
+    const commandResponse = await this.execGit(
+      path,
+      `git show ${commit} --pretty="format:" --stat`
+    );
+    return this.commitStatParser(commandResponse);
+  }
+
+  commitStatParser(commitFileList) {
+    const list = commitFileList
+      .trim()
+      .split('\n')
+      .map((item) =>
+        item
+          .split('|')
+          .map((value, index) => {
+            if (index === 1) {
+              return value.trim().split(' ');
+            } else {
+              return value.trim();
+            }
+          })
+          .flat()
+      );
+
+    return {
+      details: list.pop()[0],
+      files: list,
+    };
   }
 }
