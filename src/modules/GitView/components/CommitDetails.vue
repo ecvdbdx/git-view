@@ -21,7 +21,11 @@
 </template>
 
 <script>
-import { computed } from '@vue/reactivity';
+import { computed, onMounted } from 'vue';
+
+import { useGit } from '@/composables/useGit';
+
+import { useGitView } from '../composables/useGitView';
 
 export default {
   name: 'CommitDetails',
@@ -32,12 +36,20 @@ export default {
     },
   },
   setup(props) {
+    const { getDiffCommit } = useGit();
+    const { shaCommit } = useGitView();
+
     const recap = computed(() => props.details.recap);
     const files = computed(() => props.details.files);
+
+    onMounted(() => {
+      getDiffCommit(shaCommit.value);
+    });
 
     return {
       recap,
       files,
+      getDiffCommit,
     };
   },
 };

@@ -21,7 +21,11 @@
             </div>
           </div>
           <div class="h-2/5">
-            <CommitDetails :details="commitDetails" />
+            <CommitDetails
+              v-if="isDetailsOpened"
+              @on-close="isDetailsOpened = false"
+              :details="commitDetails"
+            />
           </div>
         </div>
       </div>
@@ -39,6 +43,7 @@ import { useFolder } from '@/composables/useFolder';
 import { useGit } from '@/composables/useGit';
 
 import { CommitDetails, CommitView, SideBar } from './components';
+import { useGitView } from './composables/useGitView';
 
 export default {
   name: 'GitViewModule',
@@ -63,7 +68,7 @@ export default {
       files,
       commitDetails,
     } = useGit();
-
+    const { isDetailsOpened } = useGitView();
     const commitList = ref(null);
     const offset = ref(commits.value.totalCommits - 10);
     const prevIsActive = ref(true);
@@ -117,6 +122,7 @@ export default {
       prevIsActive,
       files,
       commitDetails,
+      isDetailsOpened,
     };
   },
 };

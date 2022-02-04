@@ -23,7 +23,15 @@
         <DsButton @click="checkoutCommit(sha)" class="mb-4 mt-4">
           Checkout
         </DsButton>
-        <DsButton @click="getDiffCommit(sha)" class="mb-4 mt-4">
+        <DsButton
+          @click="
+            () => {
+              isDetailsOpened = true;
+              shaCommit = sha;
+            }
+          "
+          class="mb-4 mt-4"
+        >
           View details
         </DsButton>
       </div>
@@ -36,6 +44,8 @@ import { computed, ref } from '@vue/reactivity';
 import { onClickOutside } from '@vueuse/core';
 
 import { useGit } from '@/composables/useGit';
+
+import { useGitView } from '../composables/useGitView';
 
 export default {
   name: 'CommitModal',
@@ -50,7 +60,9 @@ export default {
   emits: ['onClose'],
 
   setup(props, { emit }) {
-    const { checkoutCommit, getDiffCommit } = useGit();
+    const { checkoutCommit } = useGit();
+
+    const { isDetailsOpened, shaCommit } = useGitView();
 
     const author = computed(() => props.commit.author);
     const message = computed(() => props.commit.message);
@@ -65,7 +77,8 @@ export default {
       sha,
       checkoutCommit,
       modalContainer,
-      getDiffCommit,
+      isDetailsOpened,
+      shaCommit,
     };
   },
 };
