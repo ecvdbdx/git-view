@@ -8,6 +8,7 @@ const { folderPath } = useFolder();
 const commits = ref([]);
 const branchs = ref([]);
 const totalCommits = ref(0);
+const files = ref([]);
 
 const headCommitSha = computed({
   get: () => commits.value.find((commit) => commit.isHead)?.sha,
@@ -53,15 +54,24 @@ const getGitLogsByOffset = (offset) => {
     commits.value = commitObject;
   });
 };
+const getDiffCommit = (commitSha) => {
+  ipcRenderer.send('getGitDiff-event', folderPath.value, commitSha);
+
+  ipcRenderer.on('getGitDiff-reply', (event, fileList) => {
+    files.value = fileList;
+  });
+};
 
 export const useGit = () => ({
   getCommits,
   checkoutBranch,
   getBranchs,
   checkoutCommit,
+  getGitLogsByOffset,
+  getDiffCommit,
   commits,
   branchs,
   headCommitSha,
-  getGitLogsByOffset,
   totalCommits,
+  files,
 });

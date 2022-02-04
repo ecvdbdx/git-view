@@ -104,4 +104,8 @@ export default class GitReader {
   async fetchAllGit(path) {
     await this.execGit(path, 'git fetch --all');
   }
+
+  async getGitDiff(path, commit) {
+    console.log(path, commit);
+  }
 }
