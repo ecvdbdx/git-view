@@ -13,8 +13,8 @@ const gitReader = new GitReader();
 export default [
   {
     name: GET_GIT_LOGS_EVENT,
-    fct: () => (event, folderPath) => {
-      gitReader.getGitLogs(folderPath).then((commitArray) => {
+    fct: () => (event, folderPath, offset, limit) => {
+      gitReader.getGitLogs(folderPath, offset, limit).then((commitArray) => {
         event.reply(GET_GIT_LOGS_REPLY, commitArray);
       });
     },

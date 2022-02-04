@@ -6,24 +6,23 @@
         <p class="text-center absolute w-full text-align-middle py-4">
           {{ folderPath }}
         </p>
-        <div ref="commitList" class="flex w-full h-full overflow-scroll">
-          <div class="flex self-center relative">
+        <div class="flex justify-end w-full h-full" :style="styleScroll">
+          <div class="flex self-center relative" ref="commitList">
+            <button @click="addCommits">click</button>
             <CommitView
-              v-for="(commit, index) in commits.commits"
-              :key="index"
+              v-for="(commit, commitIndex) in commits"
+              :key="commitIndex"
               :commit="commit"
             />
           </div>
         </div>
       </div>
     </div>
-    <button :disabled="!prevIsActive" @click="prev">prev</button>
-    <button :disabled="!nextIsActive" @click="next">next</button>
   </div>
 </template>
 
 <script>
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { computed, onBeforeMount, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useFolder } from '@/composables/useFolder';
@@ -49,13 +48,27 @@ export default {
       headCommitSha,
       commits,
       branchs,
-      getGitLogsByOffset,
+      index,
     } = useGit();
 
     const commitList = ref(null);
-    const offset = ref(commits.value.totalCommits - 10);
-    const prevIsActive = ref(true);
-    const nextIsActive = ref(false);
+    const scroll = ref(0);
+
+    const styleScroll = computed(
+      () => `transform: translateX(${scroll.value}px)`
+    );
+
+    const scrollHorizontal = (e) => {
+      e.preventDefault();
+      if (scroll.value + e.deltaY < 0) scroll.value = 0;
+      else scroll.value += e.deltaY;
+    };
+
+    const addCommits = () => {
+      index.value++;
+
+      getCommits();
+    };
 
     onBeforeMount(() => {
       if (!folderPath.value) router.push('/');
@@ -64,32 +77,8 @@ export default {
     });
 
     onMounted(() => {
-      commitList.value.scrollLeft = commitList.value.scrollWidth;
+      commitList.value.addEventListener('wheel', scrollHorizontal);
     });
-
-    const next = () => {
-      offset.value += 10;
-      if (offset.value + 10 >= commits.value.totalCommits) {
-        nextIsActive.value = false;
-        prevIsActive.value = true;
-      } else {
-        prevIsActive.value = true;
-        nextIsActive.value = true;
-      }
-      getGitLogsByOffset(offset.value);
-    };
-
-    const prev = () => {
-      offset.value -= 10;
-      if (offset.value < 0) {
-        offset.value = 0;
-        prevIsActive.value = false;
-      } else {
-        prevIsActive.value = true;
-        nextIsActive.value = true;
-      }
-      getGitLogsByOffset(offset.value);
-    };
 
     return {
       commits,
@@ -98,11 +87,8 @@ export default {
       headCommitSha,
       folderPath,
       commitList,
-      offset,
-      next,
-      prev,
-      nextIsActive,
-      prevIsActive,
+      addCommits,
+      styleScroll,
     };
   },
 };

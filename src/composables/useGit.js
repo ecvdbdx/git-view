@@ -8,6 +8,9 @@ const { folderPath } = useFolder();
 const commits = ref([]);
 const branchs = ref([]);
 const totalCommits = ref(0);
+const limit = ref(10);
+const index = ref(0);
+const offset = computed(() => limit.value * index.value);
 
 const headCommitSha = computed({
   get: () => commits.value.find((commit) => commit.isHead)?.sha,
@@ -19,12 +22,17 @@ const headCommitSha = computed({
   },
 });
 
-const getCommits = () => {
-  ipcRenderer.send('getGitLogs-event', folderPath.value);
-  ipcRenderer.on('getGitLogs-reply', (event, commitList) => {
-    commits.value = commitList;
-  });
-};
+ipcRenderer.on('getGitLogs-reply', (event, commitList) => {
+  commits.value = [...commitList, ...commits.value];
+});
+
+const getCommits = () =>
+  ipcRenderer.send(
+    'getGitLogs-event',
+    folderPath.value,
+    offset.value,
+    limit.value
+  );
 
 const checkoutBranch = (branchName) => {
   ipcRenderer.send('gitCheckout', folderPath.value, branchName);
@@ -64,4 +72,5 @@ export const useGit = () => ({
   headCommitSha,
   getGitLogsByOffset,
   totalCommits,
+  index,
 });

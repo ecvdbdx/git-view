@@ -1,28 +1,21 @@
 import { exec } from 'child_process';
 
 export default class GitReader {
-  constructor() {
-    this.commitList = [];
-    this.totalCommit = 0;
-  }
+  constructor() {}
 
   commitsParser(gitString) {
-    return gitString
-      .split('\n')
-      .map((commit) => {
-        const [sha, message, date, author, refNames] = commit
-          .trim()
-          .split('$$');
-        return {
-          sha,
-          message,
-          date,
-          author,
-          isHead: refNames ? refNames.includes('(HEAD') : false,
-        };
-      })
-      .reverse();
+    return gitString.split('\n').map((commit) => {
+      const [sha, message, date, author, refNames] = commit.trim().split('$$');
+      return {
+        sha,
+        message,
+        date,
+        author,
+        isHead: refNames ? refNames.includes('(HEAD') : false,
+      };
+    });
   }
+
   branchsParser(branchList) {
     return branchList
       .split('\n')
@@ -54,16 +47,13 @@ export default class GitReader {
    * @param {string} path - Path of the git folder
    * @returns {Promise <Array>}
    */
-  async getGitLogs(path) {
+  async getGitLogs(path, offset = 0, limit = 10) {
     const commandResponse = await this.execGit(
       path,
-      `git log --pretty='format:%h$$%s$$%cd$$%an$$%d'`
+      `git log --pretty='format:%h$$%s$$%cd$$%an$$%d' --max-count=${limit} --skip=${offset} --reverse`
     );
 
-    this.commitList = this.commitsParser(commandResponse);
-    this.totalCommit = this.commitList.length;
-
-    return this.getGitLogsByOffset(this.totalCommit - 10);
+    return this.commitsParser(commandResponse);
   }
 
   /**
