@@ -21,7 +21,7 @@
             </div>
           </div>
           <div class="h-2/5">
-            <CommitDetails :files="files" />
+            <CommitDetails :details="commitDetails" />
           </div>
         </div>
       </div>
@@ -61,6 +61,7 @@ export default {
       branchs,
       getGitLogsByOffset,
       files,
+      commitDetails,
     } = useGit();
 
     const commitList = ref(null);
@@ -115,6 +116,7 @@ export default {
       nextIsActive,
       prevIsActive,
       files,
+      commitDetails,
     };
   },
 };

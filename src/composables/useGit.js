@@ -9,6 +9,7 @@ const commits = ref([]);
 const branchs = ref([]);
 const totalCommits = ref(0);
 const files = ref([]);
+const commitDetails = ref([]);
 
 const headCommitSha = computed({
   get: () => commits.value.find((commit) => commit.isHead)?.sha,
@@ -57,8 +58,8 @@ const getGitLogsByOffset = (offset) => {
 const getDiffCommit = (commitSha) => {
   ipcRenderer.send('getGitDiff-event', folderPath.value, commitSha);
 
-  ipcRenderer.on('getGitDiff-reply', (event, fileList) => {
-    files.value = fileList;
+  ipcRenderer.on('getGitDiff-reply', (event, detailsList) => {
+    commitDetails.value = detailsList;
   });
 };
 
@@ -74,4 +75,5 @@ export const useGit = () => ({
   headCommitSha,
   totalCommits,
   files,
+  commitDetails,
 });

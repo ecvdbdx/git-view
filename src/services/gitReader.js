@@ -113,8 +113,8 @@ export default class GitReader {
     return this.commitStatParser(commandResponse);
   }
 
-  commitStatParser(commitFileList) {
-    const list = commitFileList
+  commitStatParser(commitDetails) {
+    const list = commitDetails
       .trim()
       .split('\n')
       .map((item) =>
@@ -131,7 +131,7 @@ export default class GitReader {
       );
 
     return {
-      details: list.pop()[0],
+      recap: list.pop()[0],
       files: list,
     };
   }
