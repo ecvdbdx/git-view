@@ -31,3 +31,14 @@ src/
 ├─ main.js
 
 ```
+
+## Table of Contents
+
+1. [Assets](#the-assets-directory)
+2. [Components](#the-root-components-directory)
+3. [Composables](#the-composables-directory)
+4. [Events](#the-events-directory)
+5. [Mocks](#the-mocks-directory)
+6. [Modules](#the-modules-directory)
+7. [Services](#the-services-directory)
+8. [Utils](#the-utils-directory)
