@@ -97,3 +97,7 @@ HomeModule/
 ├─ HomeModule.vue
 ├─ index.js
 ```
+
+## The `services/` directory
+
+## The `utils/` directory
