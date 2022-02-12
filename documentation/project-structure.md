@@ -38,10 +38,9 @@ src/
 2. [Components](#the-root-components-directory)
 3. [Composables](#the-composables-directory)
 4. [Events](#the-events-directory)
-5. [Mocks](#the-mocks-directory)
-6. [Modules](#the-modules-directory)
-7. [Services](#the-services-directory)
-8. [Utils](#the-utils-directory)
+5. [Modules](#the-modules-directory)
+6. [Services](#the-services-directory)
+7. [Utils](#the-utils-directory)
 
 ## The `assets/` directory
 
@@ -83,3 +82,18 @@ If a specific module needs a specific and scoped composable, place it inside its
 ## The `events/` directory
 
 Here you will find the list of events that are used by the Electron events listener. They are separated according to the services files that are defined in the `services/` folder and are imported in `background.js` to be initialized.
+
+## The `module/` directory
+
+This folder contains the main parts of the app. Every module can be defined as a feature with its own components, composables or anything it needs. A module can use another module as long as it helps the project readability.
+
+### Structure example:
+
+```
+HomeModule/
+├─ assets/
+├─ components/
+├─ composables/
+├─ HomeModule.vue
+├─ index.js
+```
