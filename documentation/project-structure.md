@@ -42,3 +42,22 @@ src/
 6. [Modules](#the-modules-directory)
 7. [Services](#the-services-directory)
 8. [Utils](#the-utils-directory)
+
+## The `assets/` directory
+
+As other projects, this folder is meant to receive images, icons, or any assets the app could need. Just like `components/` or `composables/` directories, it's only for globally scoped assets that are used in multiple part of the app.
+
+Any other asset that is only used in a specific scope must be placed on its module's `assets/` folder.
+
+Every type of asset needs to be placed in its dedicated folder type.
+
+### Example:
+
+```
+assets/
+├─ icons/
+│  ├─ my-icon.svg
+├─ images/
+│  ├─ my-image.png
+...
+```
