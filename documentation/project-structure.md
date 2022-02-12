@@ -47,7 +47,7 @@ src/
 
 As other projects, this folder is meant to receive images, icons, or any assets the app could need. Just like `components/` or `composables/` directories, it's only for globally scoped assets that are used in multiple part of the app.
 
-Any other asset that is only used in a specific scope must be placed on its module's `assets/` folder.
+Any other asset that is only used in a specific scope must be placed on its module's `assets/` folder. (cf: [modules section](#the-module-directory))
 
 Every type of asset needs to be placed in its dedicated folder type.
 
@@ -61,3 +61,11 @@ assets/
 │  ├─ my-image.png
 ...
 ```
+
+## The root `components/` directory
+
+This is where you'll find every components that are global to the app. It's mainly meant to contain the components like Buttons, Inputs or everything that can be used in multiple part of the app.
+
+As soon as a component is imported in at-least two parts of the project (or will be) it must be placed in the root `components/` folder.
+
+If a component is only scoped to one module, place it into its module's `component/` directory. (cf: [modules section](#the-module-directory))
