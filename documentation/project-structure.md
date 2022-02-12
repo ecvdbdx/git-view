@@ -69,3 +69,13 @@ This is where you'll find every components that are global to the app. It's main
 As soon as a component is imported in at-least two parts of the project (or will be) it must be placed in the root `components/` folder.
 
 If a component is only scoped to one module, place it into its module's `component/` directory. (cf: [modules section](#the-module-directory))
+
+## The `composables/` directory
+
+Composables are pieces of vueJs code that can be used in vue components. They allow you to externalize and segment logic for a more readable codebase.
+
+Just like root `components/` or `assets/` this root `composables/` folder is here to contain global composbales that are used multiple times in the project.
+
+Following vueJs standards a composable must be named with the `use` keyword, ex: `useMyComposable.js` and export a `useMyComposable` method.
+
+If a specific module needs a specific and scoped composable, place it inside its own `composable/` directory. (cf: [modules section](#the-module-directory))
