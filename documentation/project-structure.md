@@ -79,3 +79,7 @@ Just like root `components/` or `assets/` this root `composables/` folder is her
 Following vueJs standards a composable must be named with the `use` keyword, ex: `useMyComposable.js` and export a `useMyComposable` method.
 
 If a specific module needs a specific and scoped composable, place it inside its own `composable/` directory. (cf: [modules section](#the-module-directory))
+
+## The `events/` directory
+
+Here you will find the list of events that are used by the Electron events listener. They are separated according to the services files that are defined in the `services/` folder and are imported in `background.js` to be initialized.
