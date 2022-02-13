@@ -40,7 +40,6 @@ src/
 4. [Events](#the-events-directory)
 5. [Modules](#the-modules-directory)
 6. [Services](#the-services-directory)
-7. [Utils](#the-utils-directory)
 
 ## The `assets/` directory
 
@@ -100,4 +99,6 @@ HomeModule/
 
 ## The `services/` directory
 
-## The `utils/` directory
+This is the place where we communicate with external servicies, like the terminal for git commands or the os folder system. This directory can be seen as the "backend" of our application.
+
+There is a [discussion](https://github.com/ecvdbdx/git-view/discussions/47) about its format, so this directory could change in the future.
