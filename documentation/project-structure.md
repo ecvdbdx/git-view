@@ -99,6 +99,8 @@ HomeModule/
 
 ## The `services/` directory
 
-This is the place where we communicate with external servicies, like the terminal for git commands or the os folder system. This directory can be seen as the "backend" of our application.
+This is the place where we communicate with external services, like the terminal for git commands or the OS folder system. This directory can be seen as the "back-end" of our application.
+
+Every module in `services/` should have a battery of unit-tests for each of its methods
 
 There is a [discussion](https://github.com/ecvdbdx/git-view/discussions/47) about its format, so this directory could change in the future.
