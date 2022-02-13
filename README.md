@@ -15,7 +15,7 @@ Using VueJs and ElectronJs
 1. [Getting Started](#getting-started)
 2. [Release Guide](#release-guide)
 3. [Architecture](./documentation/project-structure.md)
-4. [Contributing Guide](CONTRIBUTING.md)
+4. [Contribution Guide](CONTRIBUTING.md)
 
 ## Getting Started
 
