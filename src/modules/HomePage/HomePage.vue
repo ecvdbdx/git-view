@@ -12,7 +12,10 @@
         {{ folderPathError }}
       </p>
     </div>
-    <ProjectHistoryList :project-list="projectsHistory" />
+    <ProjectHistoryList
+      v-if="projectsHistory"
+      :project-list="projectsHistory"
+    />
   </div>
 </template>
 
@@ -33,7 +36,7 @@ export default {
 
     const { getProjectsHistory } = useLocalForage();
     const router = useRouter();
-    const projectsHistory = ref({});
+    const projectsHistory = ref(null);
 
     const onButtonClick = async () => {
       getFolderPath();
