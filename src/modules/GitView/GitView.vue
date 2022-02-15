@@ -13,7 +13,7 @@
           <div class="flex items-end h-1/2">
             <div class="flex relative">
               <CommitView
-                v-for="(commit, index) in commits"
+                v-for="(commit, index) in commits.commits"
                 :key="index"
                 :commit="commit"
                 :prev-commit="index - 1 >= 0 ? commits[index - 1] : null"
