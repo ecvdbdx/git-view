@@ -14,7 +14,7 @@ export default class GitReader {
           .trim()
           .split('$$');
         return {
-          sha,
+          sha: sha.replace("'format:", ''),
           message,
           date,
           author,
