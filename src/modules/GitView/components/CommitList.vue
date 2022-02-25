@@ -1,7 +1,10 @@
 <template>
-  <div class="flex justify-end w-full h-full" :style="styleScroll">
-    <div class="flex self-center relative" ref="commitList">
-      <button @click="addCommits">click</button>
+  <div class="flex justify-end w-full h-full">
+    <div
+      class="flex self-center relative"
+      ref="commitList"
+      :style="styleScroll"
+    >
       <CommitView :commit="{}" />
       <CommitView :commit="{}" ref="lastCommit" />
       <CommitView
@@ -14,8 +17,8 @@
 </template>
 
 <script>
-import { useElementVisibility } from '@vueuse/core';
-import { computed, onMounted, ref, watch } from 'vue';
+import { useIntersectionObserver } from '@vueuse/core';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 import { useGit } from '@/composables/useGit';
 
@@ -35,18 +38,21 @@ export default {
     },
   },
 
-  setup() {
+  setup(props) {
     const { getCommits, index } = useGit();
 
     const commitList = ref(null);
-    const lastCommit = ref(null);
     const scroll = ref(0);
-    const targetIsVisible = computed(() => {
-      if (lastCommit?.value?.$el) {
-        return useElementVisibility(commitList.value);
+
+    const lastCommit = ref(null);
+    const targetIsVisible = ref(false);
+
+    const { stop } = useIntersectionObserver(
+      lastCommit,
+      ([{ isIntersecting }]) => {
+        targetIsVisible.value = isIntersecting;
       }
-      return null;
-    });
+    );
 
     const addCommits = () => {
       index.value++;
@@ -67,9 +73,10 @@ export default {
     onMounted(() => {
       commitList.value.addEventListener('wheel', scrollHorizontal);
     });
+    onUnmounted(() => stop());
 
     watch(targetIsVisible, (newValue) => {
-      console.log(newValue);
+      if (props.commits.length > 0 && newValue) addCommits();
     });
 
     return {
@@ -77,6 +84,7 @@ export default {
       styleScroll,
       commitList,
       lastCommit,
+      targetIsVisible,
     };
   },
 };
