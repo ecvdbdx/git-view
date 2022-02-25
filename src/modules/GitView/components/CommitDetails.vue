@@ -3,7 +3,7 @@
     id="details-sidebar"
     class="flex flex-col border-t-green-400 border-solid border-t-width-2"
   >
-    <DsButton class="mx-4 mt-4">Close</DsButton>
+    <DsButton @click="closeDetail" class="mx-4 mt-4">Close</DsButton>
     <p>{{ recap }}</p>
     <ul
       class="flex flex-col justify-center text-xs flex-shrink-0 p-4 flex-grow-0"
@@ -35,7 +35,10 @@ export default {
       required: true,
     },
   },
-  setup(props) {
+
+  emits: ['onClose'],
+
+  setup(props, { emit }) {
     const { getDiffCommit } = useGit();
     const { shaCommit } = useGitView();
 
@@ -46,10 +49,13 @@ export default {
       getDiffCommit(shaCommit.value);
     });
 
+    const closeDetail = () => emit('onClose');
+
     return {
       recap,
       files,
       getDiffCommit,
+      closeDetail,
     };
   },
 };
