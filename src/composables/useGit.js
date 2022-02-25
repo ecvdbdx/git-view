@@ -56,7 +56,6 @@ const getGitLogsByOffset = (offset) => {
   });
 };
 const getDiffCommit = (commitSha) => {
-  console.log(commitSha);
   ipcRenderer.send('getGitDiff-event', folderPath.value, commitSha);
 
   ipcRenderer.on('getGitDiff-reply', (event, detailsList) => {

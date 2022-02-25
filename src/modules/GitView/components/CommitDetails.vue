@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 
 import { useGit } from '@/composables/useGit';
 
@@ -47,6 +47,10 @@ export default {
 
     onMounted(() => {
       getDiffCommit(shaCommit.value);
+    });
+
+    watch(shaCommit, (newSha) => {
+      getDiffCommit(newSha);
     });
 
     const closeDetail = () => emit('onClose');

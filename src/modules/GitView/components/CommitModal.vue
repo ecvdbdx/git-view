@@ -1,7 +1,17 @@
 <template>
   <div class="absolute top-20" ref="modalContainer">
     <div
-      class="border-black border-solid border-width-2 p-4 w-40 max-h-250px h-200px w-300px bg-white flex flex-col justify-between"
+      class="
+        border-black border-solid border-width-2
+        p-4
+        w-40
+        max-h-250px
+        h-200px
+        w-300px
+        bg-white
+        flex flex-col
+        justify-between
+      "
     >
       <div>
         <p>{{ message }}</p>
