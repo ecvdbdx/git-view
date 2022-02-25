@@ -67,10 +67,23 @@ export default class GitReader {
 
   /**
    * @param {string} path - Path of the git folder
+   * @returns Promise of Array
+   */
+  async getGitBranchsInfo(path) {
+    const commandResponse = await this.execGit(
+      path,
+      'git rev-list --count HEAD'
+    );
+    return commandResponse;
+  }
+
+  /**
+   * @param {string} path - Path of the git folder
    * @param {string} branch - Name of the branch to checkout
    * @returns {void}
    */
   async checkoutBranch(path, branch) {
+    console.log('popo');
     await this.execGit(path, `git checkout ${branch}`);
   }
 

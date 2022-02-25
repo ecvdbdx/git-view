@@ -10,6 +10,7 @@ const branchs = ref([]);
 const limit = ref(10);
 const index = ref(0);
 const offset = computed(() => limit.value * index.value);
+const currentBranchCommits = ref(0);
 
 const headCommitSha = computed({
   get: () => commits.value.find((commit) => commit.isHead)?.sha,
@@ -36,6 +37,7 @@ const getCommits = () =>
 const checkoutBranch = (branchName) => {
   ipcRenderer.send('gitCheckout', folderPath.value, branchName);
   getBranchs();
+  getBranchsInfo();
   getCommits();
 };
 
@@ -45,6 +47,12 @@ const getBranchs = () => {
   ipcRenderer.on('getGitBranchs-reply', (event, branchList) => {
     branchs.value = branchList;
   });
+};
+ipcRenderer.on('getGitBranchsInfo-reply', (event, branchInfo) => {
+  currentBranchCommits.value = branchInfo;
+});
+const getBranchsInfo = () => {
+  ipcRenderer.send('getGitBranchsInfo-event', folderPath.value);
 };
 
 const checkoutCommit = (commitSha) => {
@@ -57,6 +65,7 @@ export const useGit = () => ({
   checkoutBranch,
   getBranchs,
   checkoutCommit,
+  getBranchsInfo,
   commits,
   branchs,
   headCommitSha,

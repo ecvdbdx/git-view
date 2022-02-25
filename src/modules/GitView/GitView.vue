@@ -34,6 +34,7 @@ export default {
       getCommits,
       getBranchs,
       checkoutBranch,
+      getBranchsInfo,
       headCommitSha,
       commits,
       branchs,
@@ -43,6 +44,7 @@ export default {
       if (!folderPath.value) router.push('/');
       getCommits();
       getBranchs();
+      getBranchsInfo();
     });
 
     return {
