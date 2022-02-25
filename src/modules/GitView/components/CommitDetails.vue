@@ -4,17 +4,18 @@
     class="flex flex-col border-t-green-400 border-solid border-t-width-2"
   >
     <DsButton class="mx-4 mt-4">Close</DsButton>
-    <p>{{ recap }}</p>
+    <p class="pt-4 px-4">{{ recap }}</p>
     <ul
-      class="flex flex-col justify-center text-xs flex-shrink-0 p-4 flex-grow-0"
+      class="flex flex-col justify-center text-sm flex-shrink-0 p-4 flex-grow-0"
     >
       <li
+        class="flex items-center"
         v-for="([filename, affected_line, stat], index) in files"
         :key="index"
       >
-        <span>{{ filename }}</span>
-        <span>{{ affected_line }}</span>
-        <span>{{ stat }}</span>
+        <span class="mr-2">{{ filename }}</span>
+        <span class="mr-2">{{ affected_line }}</span>
+        <span class="mb-0.5" v-html="formatStat(stat)"></span>
       </li>
     </ul>
   </div>
@@ -46,9 +47,25 @@ export default {
       getDiffCommit(shaCommit.value);
     });
 
+    const regex = /(\+*)(-*)/;
+    const formatStat = (stat) => {
+      if (stat) {
+        const match = stat.match(regex);
+        return (
+          '<span class="text-green-700 text-xl">' +
+          match[1] +
+          '</span>' +
+          ' <span class="text-red-700 text-xl tracking-2px">' +
+          match[2] +
+          '</span>'
+        );
+      }
+    };
+
     return {
       recap,
       files,
+      formatStat,
       getDiffCommit,
     };
   },
