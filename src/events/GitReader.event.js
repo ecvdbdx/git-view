@@ -47,8 +47,8 @@ export default [
   },
   {
     name: GET_GIT_DIFF_EVENT,
-    fct: () => (event, folderPath, target) => {
-      gitReader.getGitDiff(folderPath, target).then((details) => {
+    fct: () => (event, folderPath, target, stat) => {
+      gitReader.getGitDiff(folderPath, target, stat).then((details) => {
         event.reply(GET_GIT_DIFF_REPLY, details);
       });
     },

@@ -105,10 +105,10 @@ export default class GitReader {
     await this.execGit(path, 'git fetch --all');
   }
 
-  async getGitDiff(path, commit) {
+  async getGitDiff(path, commit, stat) {
     const commandResponse = await this.execGit(
       path,
-      `git show ${commit} --pretty="format:" --stat`
+      `git show ${commit} --pretty="format:" ${stat ? '--stat' : ''}`
     );
     return this.commitStatParser(commandResponse);
   }

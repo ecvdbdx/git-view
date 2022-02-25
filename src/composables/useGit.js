@@ -55,8 +55,8 @@ const getGitLogsByOffset = (offset) => {
     commits.value = commitObject;
   });
 };
-const getDiffCommit = (commitSha) => {
-  ipcRenderer.send('getGitDiff-event', folderPath.value, commitSha);
+const getDiffCommit = (commitSha, stat = true) => {
+  ipcRenderer.send('getGitDiff-event', folderPath.value, commitSha, stat);
 
   ipcRenderer.on('getGitDiff-reply', (event, detailsList) => {
     commitDetails.value = detailsList;
