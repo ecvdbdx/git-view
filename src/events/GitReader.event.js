@@ -35,12 +35,4 @@ export default [
       });
     },
   },
-  {
-    name: GET_GIT_LOGS_BY_OFFSET_EVENT,
-    fct: () => (event, offset) => {
-      gitReader.getGitLogsByOffset(offset).then((commits) => {
-        event.reply(GET_GIT_LOGS_BY_OFFSET_REPLY, commits);
-      });
-    },
-  },
 ];

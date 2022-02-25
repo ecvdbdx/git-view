@@ -57,19 +57,6 @@ export default class GitReader {
   }
 
   /**
-   * @param {number} offset - Offset of commits
-   * @param {number} limit - Number of commits to return
-   * @returns {Promise <Array>}
-   */
-  async getGitLogsByOffset(offset, limit = 10) {
-    const commitsByOffset = this.commitList.slice(offset, offset + limit);
-    return {
-      commits: commitsByOffset,
-      totalCommits: this.totalCommit,
-    };
-  }
-
-  /**
    * @param {string} path - Path of the git folder
    * @returns Promise of Array
    */
