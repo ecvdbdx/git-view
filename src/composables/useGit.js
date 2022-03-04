@@ -8,7 +8,6 @@ const { folderPath } = useFolder();
 const commits = ref([]);
 const branchs = ref([]);
 const totalCommits = ref(0);
-const files = ref([]);
 const commitDetails = ref([]);
 
 const headCommitSha = computed({
@@ -74,6 +73,5 @@ export const useGit = () => ({
   branchs,
   headCommitSha,
   totalCommits,
-  files,
   commitDetails,
 });

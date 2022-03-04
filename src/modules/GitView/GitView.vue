@@ -65,7 +65,6 @@ export default {
       commits,
       branchs,
       getGitLogsByOffset,
-      files,
       commitDetails,
     } = useGit();
     const { isDetailsOpened } = useGitView();
@@ -120,7 +119,6 @@ export default {
       prev,
       nextIsActive,
       prevIsActive,
-      files,
       commitDetails,
       isDetailsOpened,
     };
