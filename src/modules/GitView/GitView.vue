@@ -69,9 +69,9 @@ export default {
       headCommitSha,
       folderPath,
       files,
-      commitDetails,
       isDetailsOpened,
       currentBranchCommits,
+      commitDetails,
     };
   },
 };

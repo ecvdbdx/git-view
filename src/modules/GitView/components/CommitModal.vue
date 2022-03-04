@@ -18,6 +18,7 @@
             () => {
               isDetailsOpened = true;
               shaCommit = sha;
+              prevShaCommit = prevSha;
             }
           "
           class="mb-4 mt-4"
@@ -45,6 +46,10 @@ export default {
       type: Object,
       required: true,
     },
+    prevCommit: {
+      type: Object,
+      required: true,
+    },
   },
 
   emits: ['onClose'],
@@ -52,11 +57,14 @@ export default {
   setup(props, { emit }) {
     const { checkoutCommit } = useGit();
 
-    const { isDetailsOpened, shaCommit } = useGitView();
+    const { isDetailsOpened, shaCommit, prevShaCommit } = useGitView();
 
     const author = computed(() => props.commit.author);
     const message = computed(() => props.commit.message);
     const sha = computed(() => props.commit.sha);
+    const prevSha = computed(() =>
+      props.prevCommit ? props.prevCommit.sha : null
+    );
 
     const modalContainer = ref(null);
     onClickOutside(modalContainer, () => emit('onClose'));
@@ -65,10 +73,12 @@ export default {
       author,
       message,
       sha,
+      prevSha,
       checkoutCommit,
       modalContainer,
       isDetailsOpened,
       shaCommit,
+      prevShaCommit,
     };
   },
 };
