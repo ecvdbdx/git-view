@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { computed, ref } from 'vue';
+import { computed, defineSSRCustomElement, ref } from 'vue';
 
 import { useFolder } from './useFolder';
 
@@ -40,7 +40,6 @@ const checkoutBranch = (branchName) => {
   getBranchsInfo();
   getCommits();
 };
-
 const getBranchs = () => {
   ipcRenderer.send('getGitBranchs-event', folderPath.value);
 
@@ -50,6 +49,7 @@ const getBranchs = () => {
 };
 ipcRenderer.on('getGitBranchsInfo-reply', (event, branchInfo) => {
   currentBranchCommits.value = branchInfo;
+  console.log('usebg  SSSSSS' + currentBranchCommits.value);
 });
 const getBranchsInfo = () => {
   ipcRenderer.send('getGitBranchsInfo-event', folderPath.value);
@@ -70,4 +70,5 @@ export const useGit = () => ({
   branchs,
   headCommitSha,
   index,
+  currentBranchCommits,
 });

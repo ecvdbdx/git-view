@@ -5,7 +5,7 @@
       <p class="text-center w-full text-align-middle py-4">
         {{ folderPath }}
       </p>
-      <CommitList :commits="commits" />
+      <CommitList :nb-commits="currentBranchCommits.value" :commits="commits" />
     </div>
   </div>
 </template>
@@ -38,6 +38,7 @@ export default {
       headCommitSha,
       commits,
       branchs,
+      currentBranchCommits,
     } = useGit();
 
     onBeforeMount(() => {
@@ -46,6 +47,7 @@ export default {
       getBranchs();
       getBranchsInfo();
     });
+    console.log('GIT VIEW' + currentBranchCommits.value);
 
     return {
       commits,

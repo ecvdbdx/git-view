@@ -1,6 +1,7 @@
 import {
   GET_GIT_BRANCHS_EVENT,
   GET_GIT_BRANCHS_INFO_EVENT,
+  GET_GIT_BRANCHS_INFO_REPLY,
   GET_GIT_BRANCHS_REPLY,
   GET_GIT_LOGS_BY_OFFSET_EVENT,
   GET_GIT_LOGS_BY_OFFSET_REPLY,
@@ -39,9 +40,8 @@ export default [
   {
     name: GET_GIT_BRANCHS_INFO_EVENT,
     fct: () => async (event, folderPath) => {
-      console.log('EVENTNTNTNTN');
-      gitReader.getGitBranchsInfo(folderPath).catch((error) => {
-        console.error(error);
+      gitReader.getGitBranchsInfo(folderPath).then((nbCommit) => {
+        event.reply(GET_GIT_BRANCHS_INFO_REPLY, nbCommit);
       });
     },
   },

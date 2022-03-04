@@ -36,11 +36,14 @@ export default {
       type: Array,
       required: true,
     },
+    nbCommits: {
+      type: Number,
+      required: true,
+    },
   },
 
   setup(props) {
     const { getCommits, index } = useGit();
-
     const commitList = ref(null);
     const scroll = ref(0);
 
