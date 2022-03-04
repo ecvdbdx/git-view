@@ -19,6 +19,7 @@
               isDetailsOpened = true;
               shaCommit = sha;
               prevShaCommit = prevSha;
+              isFileDetailsOpened = false;
             }
           "
           class="mb-4 mt-4"
@@ -57,7 +58,8 @@ export default {
   setup(props, { emit }) {
     const { checkoutCommit } = useGit();
 
-    const { isDetailsOpened, shaCommit, prevShaCommit } = useGitView();
+    const { isDetailsOpened, shaCommit, prevShaCommit, isFileDetailsOpened } =
+      useGitView();
 
     const author = computed(() => props.commit.author);
     const message = computed(() => props.commit.message);
@@ -77,6 +79,7 @@ export default {
       checkoutCommit,
       modalContainer,
       isDetailsOpened,
+      isFileDetailsOpened,
       shaCommit,
       prevShaCommit,
     };

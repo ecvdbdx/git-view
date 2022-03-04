@@ -133,6 +133,7 @@ export default class GitReader {
   }
 
   fileDetailsParser(fileDetails) {
+    // TODO: fix edge case when parsing himself 2ddaa65
     const allResultCommandLine = fileDetails;
 
     const allLinesSplited = allResultCommandLine.split('\n');

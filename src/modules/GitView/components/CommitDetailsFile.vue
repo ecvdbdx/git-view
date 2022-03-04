@@ -1,11 +1,15 @@
 <template>
   <div class="pt-4 px-4">
-    <p>Coucou</p>
+    <div class="bg-gray-200 p-2 px-4">
+      <div>
+        <p>{{ newFile }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { onMounted, watch } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 
 import { useGit } from '@/composables/useGit';
 
@@ -17,13 +21,23 @@ export default {
     const { getFileDetails, fileDetails } = useGit();
     const { prevShaCommit, shaCommit, fileName } = useGitView();
 
+    const newFile = computed(() => fileDetails.value.newFile);
+
     onMounted(() => {
       getFileDetails(shaCommit.value, prevShaCommit.value, fileName.value);
+    });
+
+    watch(shaCommit, (newSha) => {
+      getFileDetails(newSha.value, prevShaCommit.value, fileName.value);
     });
 
     watch(fileDetails, (newFileDetails) => {
       console.log(newFileDetails);
     });
+
+    return {
+      newFile,
+    };
   },
 };
 </script>
