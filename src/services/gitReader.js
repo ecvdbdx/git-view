@@ -84,7 +84,6 @@ export default class GitReader {
    * @returns {void}
    */
   async checkoutBranch(path, branch) {
-    console.log('popo');
     await this.execGit(path, `git checkout ${branch}`);
   }
 
