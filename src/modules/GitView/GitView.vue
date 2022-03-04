@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useFolder } from '@/composables/useFolder';
@@ -53,11 +53,11 @@ export default {
 
     const { isDetailsOpened } = useGitView();
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
       if (!folderPath.value) router.push('/');
-      getCommits();
-      getBranchs();
-      getBranchsInfo();
+      await getCommits();
+      await getBranchs();
+      await getBranchsInfo();
     });
 
     return {
