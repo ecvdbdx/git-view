@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { computed, defineSSRCustomElement, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { useFolder } from './useFolder';
 
@@ -11,53 +11,64 @@ const limit = ref(10);
 const index = ref(0);
 const offset = computed(() => limit.value * index.value);
 const currentBranchCommits = ref(0);
+const files = ref([]);
+const commitDetails = ref([]);
 
 const headCommitSha = computed({
   get: () => commits.value.find((commit) => commit.isHead)?.sha,
   set: (newValue) => {
-    commits.value.map((commit) => {
+    commits.value.commits.map((commit) => {
       commit.isHead = commit.sha === newValue;
       return commit;
     });
   },
 });
 
-ipcRenderer.on('getGitLogs-reply', (event, commitList) => {
-  commits.value = [...commitList, ...commits.value];
-});
-
-const getCommits = () =>
-  ipcRenderer.send(
+const getCommits = async () => {
+  const result = await ipcRenderer.invoke(
     'getGitLogs-event',
     folderPath.value,
     offset.value,
     limit.value
   );
-
-const checkoutBranch = (branchName) => {
-  ipcRenderer.send('gitCheckout', folderPath.value, branchName);
-  getBranchs();
-  getBranchsInfo();
-  getCommits();
+  commits.value = [...result, ...commits.value];
 };
-const getBranchs = () => {
-  ipcRenderer.send('getGitBranchs-event', folderPath.value);
 
-  ipcRenderer.on('getGitBranchs-reply', (event, branchList) => {
-    branchs.value = branchList;
-  });
+const checkoutBranch = async (branchName) => {
+  await ipcRenderer.invoke('gitCheckout', folderPath.value, branchName);
+  await getBranchs();
+  await getBranchsInfo();
+  await getCommits();
 };
-ipcRenderer.on('getGitBranchsInfo-reply', (event, branchInfo) => {
-  currentBranchCommits.value = branchInfo;
-  console.log('usebg  SSSSSS' + currentBranchCommits.value);
-});
-const getBranchsInfo = () => {
-  ipcRenderer.send('getGitBranchsInfo-event', folderPath.value);
+
+const getBranchs = async () => {
+  const result = await ipcRenderer.invoke(
+    'getGitBranchs-event',
+    folderPath.value
+  );
+  branchs.value = result;
+};
+
+const getBranchsInfo = async () => {
+  const branchInfo = await ipcRenderer.invoke(
+    'getGitBranchsInfo-event',
+    folderPath.value
+  );
+  currentBranchCommits.value = parseInt(branchInfo);
 };
 
 const checkoutCommit = (commitSha) => {
-  ipcRenderer.send('gitCheckout', folderPath.value, commitSha);
+  ipcRenderer.invoke('gitCheckout', folderPath.value, commitSha);
   headCommitSha.value = commitSha;
+};
+
+const getDiffCommit = async (commitSha, stat = true) => {
+  commitDetails.value = await ipcRenderer.invoke(
+    'getGitDiff-event',
+    folderPath.value,
+    commitSha,
+    stat
+  );
 };
 
 export const useGit = () => ({
@@ -66,9 +77,12 @@ export const useGit = () => ({
   getBranchs,
   checkoutCommit,
   getBranchsInfo,
+  getDiffCommit,
   commits,
   branchs,
   headCommitSha,
   index,
   currentBranchCommits,
+  files,
+  commitDetails,
 });

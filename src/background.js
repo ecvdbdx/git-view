@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow, ipcMain, protocol } from 'electron';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
+import { autoUpdater } from 'electron-updater';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 
 import CustomEvents from './events';
@@ -37,7 +38,7 @@ async function createWindow() {
     win.loadURL('app://./index.html');
   }
   // Initialize events
-  CustomEvents.forEach(({ name, fct }) => ipcMain.on(name, fct(win)));
+  CustomEvents.forEach(({ name, fct }) => ipcMain.handle(name, fct));
 }
 
 // Quit when all windows are closed.
@@ -68,6 +69,7 @@ app.on('ready', async () => {
     }
   }
   createWindow();
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 // Exit cleanly on request from parent process in development mode.

@@ -5,7 +5,14 @@
       <p class="text-center w-full text-align-middle py-4">
         {{ folderPath }}
       </p>
-      <CommitList :nb-commits="currentBranchCommits.value" :commits="commits" />
+      <CommitList :nb-commits="currentBranchCommits" :commits="commits" />
+      <div class="h-2/5">
+        <CommitDetails
+          v-if="isDetailsOpened"
+          @on-close="isDetailsOpened = false"
+          :details="commitDetails"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -17,7 +24,8 @@ import { useRouter } from 'vue-router';
 import { useFolder } from '@/composables/useFolder';
 import { useGit } from '@/composables/useGit';
 
-import { CommitList, SideBar } from './components';
+import { CommitDetails, CommitList, SideBar } from './components';
+import { useGitView } from './composables/useGitView';
 
 export default {
   name: 'GitViewModule',
@@ -25,6 +33,7 @@ export default {
   components: {
     SideBar,
     CommitList,
+    CommitDetails,
   },
 
   setup() {
@@ -39,7 +48,11 @@ export default {
       commits,
       branchs,
       currentBranchCommits,
+      files,
+      commitDetails,
     } = useGit();
+
+    const { isDetailsOpened } = useGitView();
 
     onBeforeMount(() => {
       if (!folderPath.value) router.push('/');
@@ -47,7 +60,6 @@ export default {
       getBranchs();
       getBranchsInfo();
     });
-    console.log('GIT VIEW' + currentBranchCommits.value);
 
     return {
       commits,
@@ -55,6 +67,10 @@ export default {
       checkoutBranch,
       headCommitSha,
       folderPath,
+      files,
+      commitDetails,
+      isDetailsOpened,
+      currentBranchCommits,
     };
   },
 };

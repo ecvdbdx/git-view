@@ -1,10 +1,8 @@
 import {
   GET_GIT_BRANCHS_EVENT,
   GET_GIT_BRANCHS_INFO_EVENT,
-  GET_GIT_BRANCHS_INFO_REPLY,
-  GET_GIT_BRANCHS_REPLY,
+  GET_GIT_DIFF_EVENT,
   GET_GIT_LOGS_EVENT,
-  GET_GIT_LOGS_REPLY,
   GIT_CHECKOUT,
 } from '../../utils/constants';
 import GitReader from '../services/gitReader';
@@ -13,34 +11,36 @@ const gitReader = new GitReader();
 export default [
   {
     name: GET_GIT_LOGS_EVENT,
-    fct: () => (event, folderPath, offset, limit) => {
-      gitReader.getGitLogs(folderPath, offset, limit).then((commitArray) => {
-        event.reply(GET_GIT_LOGS_REPLY, commitArray);
-      });
+    fct: async (event, folderPath, offset, limit) => {
+      const commitArray = await gitReader.getGitLogs(folderPath, offset, limit);
+      return commitArray;
     },
   },
   {
     name: GET_GIT_BRANCHS_EVENT,
-    fct: () => (event, folderPath) => {
-      gitReader.getGitBranchs(folderPath).then((branchsArray) => {
-        event.reply(GET_GIT_BRANCHS_REPLY, branchsArray);
-      });
+    fct: async (event, folderPath) => {
+      const branchsArray = await gitReader.getGitBranchs(folderPath);
+      return branchsArray;
     },
   },
   {
     name: GIT_CHECKOUT,
-    fct: () => async (event, folderPath, target) => {
-      gitReader.checkoutBranch(folderPath, target).catch((error) => {
-        console.error(error);
-      });
+    fct: (event, folderPath, target) => {
+      gitReader.checkoutBranch(folderPath, target);
     },
   },
   {
     name: GET_GIT_BRANCHS_INFO_EVENT,
-    fct: () => async (event, folderPath) => {
-      gitReader.getGitBranchsInfo(folderPath).then((nbCommit) => {
-        event.reply(GET_GIT_BRANCHS_INFO_REPLY, nbCommit);
-      });
+    fct: async (event, folderPath) => {
+      const nbCommit = await gitReader.getGitBranchsInfo(folderPath);
+      return nbCommit;
+    },
+  },
+  {
+    name: GET_GIT_DIFF_EVENT,
+    fct: async (event, folderPath, target, stat) => {
+      const details = await gitReader.getGitDiff(folderPath, target, stat);
+      return details;
     },
   },
 ];

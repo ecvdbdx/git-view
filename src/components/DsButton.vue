@@ -3,16 +3,7 @@
     :is="buttonType"
     :to="to"
     :href="href"
-    class="
-      bg-green-500
-      px-5
-      py-2
-      text-white
-      rounded
-      block
-      cursor-pointer
-      no-underline
-    "
+    class="bg-green-500 px-5 py-2 text-white rounded block cursor-pointer no-underline"
   >
     <slot />
   </component>

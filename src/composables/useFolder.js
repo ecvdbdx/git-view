@@ -3,27 +3,18 @@ import { ref } from 'vue';
 
 import { useLocalForage } from './localForage';
 
-const folderPath = ref('');
-const folderPathError = ref('');
 const { storeHistory } = useLocalForage();
 
-const registerGetFolderEvent = (router) => {
-  ipcRenderer.on('getFolderPath-reply', (event, args) => {
-    if (args.isGit) {
-      folderPath.value = args.folderPath[0];
-      storeHistory(args.folderPath[0]);
-      router.push({
-        name: 'GitView',
-        query: { folderPath: args.folderPath[0] },
-      });
-    } else {
-      folderPathError.value = args.error;
-    }
-  });
-};
+const folderPath = ref('');
+const folderPathError = ref('');
 
-const getFolderPath = () => {
-  ipcRenderer.send('getFolderPath-event');
+const openFolderWindow = async () => {
+  const response = await ipcRenderer.invoke('getFolderPath-event');
+
+  if (response.isGit) {
+    setFolderPath(response.folderPath[0]);
+    storeHistory(response.folderPath[0]);
+  } else folderPathError.value = response.error;
 };
 
 const setFolderPath = (historyFolderPath) => {
@@ -33,7 +24,6 @@ const setFolderPath = (historyFolderPath) => {
 export const useFolder = () => ({
   folderPath,
   folderPathError,
-  getFolderPath,
-  registerGetFolderEvent,
+  openFolderWindow,
   setFolderPath,
 });
