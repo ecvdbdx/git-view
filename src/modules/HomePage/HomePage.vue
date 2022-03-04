@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { onBeforeMount, onMounted, ref } from '@vue/runtime-core';
+import { onBeforeMount, ref } from '@vue/runtime-core';
 import { useRouter } from 'vue-router';
 
 import { useLocalForage } from '@/composables/localForage';
@@ -31,25 +31,25 @@ import { ProjectHistoryList } from './components';
 export default {
   components: { ProjectHistoryList },
   setup() {
-    const { getFolderPath, registerGetFolderEvent, folderPathError } =
-      useFolder();
-
-    const { getProjectsHistory } = useLocalForage();
     const router = useRouter();
+    const { openFolderWindow, folderPathError } = useFolder();
+    const { getProjectsHistory, folderPath } = useLocalForage();
+
     const projectsHistory = ref(null);
 
     const onButtonClick = async () => {
-      getFolderPath();
+      await openFolderWindow();
+
+      router.push({
+        name: 'GitView',
+        query: { folderPath },
+      });
     };
 
     onBeforeMount(() => {
       getProjectsHistory().then((res) => {
         projectsHistory.value = res;
       });
-    });
-
-    onMounted(() => {
-      registerGetFolderEvent(router);
     });
 
     return { onButtonClick, folderPathError, projectsHistory };
