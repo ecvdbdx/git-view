@@ -123,4 +123,44 @@ export default class GitReader {
       files: list,
     };
   }
+
+  commitDetailsParser(commitDetails) {
+    const allResultCommandLine = commitDetails;
+
+    const allLinesSplited = allResultCommandLine.split('\n');
+
+    let allFiles = [];
+
+    for (let line in allLinesSplited) {
+      line = parseInt(line);
+      const lineValue = allLinesSplited[line];
+      let lastIndex = allFiles.length - 1;
+      let lastFile = allFiles[lastIndex];
+      if (lineValue.includes('diff --git')) {
+        allFiles.push({});
+        lastIndex = allFiles.length - 1;
+        lastFile = allFiles[lastIndex];
+        lastFile.command = lineValue;
+        lastFile.commits = allLinesSplited[line + 1];
+        lastFile.oldFile = allLinesSplited[line + 2];
+        lastFile.newFile = allLinesSplited[line + 3];
+        lastFile.fileContent = [];
+      } else if (lineValue.includes('@@ -')) {
+        lastFile.fileContent.push({
+          separationName: lineValue,
+          separationContent: [],
+        });
+      } else if (
+        !allLinesSplited[line - 1].includes('diff --git') &&
+        !allLinesSplited[line - 2].includes('diff --git') &&
+        !allLinesSplited[line - 3].includes('diff --git')
+      ) {
+        lastFile.fileContent[
+          lastFile.fileContent.length - 1
+        ].separationContent.push(lineValue);
+      }
+    }
+
+    return allFiles;
+  }
 }
