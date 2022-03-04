@@ -1,18 +1,17 @@
 <template>
   <div class="flex h-full w-full overflow-hidden">
     <SideBar :branchs="branchs" />
-    <div class="overflow-hidden h-full items-center">
+    <div class="overflow-hidden h-full items-center relative">
       <p class="text-center w-full text-align-middle py-4">
         {{ folderPath }}
       </p>
       <CommitList :nb-commits="currentBranchCommits" :commits="commits" />
-      <div class="h-2/5">
-        <CommitDetails
-          v-if="isDetailsOpened"
-          @on-close="isDetailsOpened = false"
-          :details="commitDetails"
-        />
-      </div>
+      <CommitDetails
+        class="h-2/5 absolute bottom-0 bg-white w-full"
+        v-if="isDetailsOpened"
+        @on-close="isDetailsOpened = false"
+        :details="commitDetails"
+      />
     </div>
   </div>
 </template>
