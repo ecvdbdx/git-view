@@ -79,18 +79,14 @@ const getDiffCommit = async (commitSha, stat = true) => {
   );
 };
 
-const getFileDetails = (commitSha, prevShaCommit, fileName) => {
-  ipcRenderer.send(
+const getFileDetails = async (commitSha, prevShaCommit, fileName) => {
+  fileDetails.value = await ipcRenderer.invoke(
     'getFileDetails-event',
     folderPath.value,
     commitSha,
     prevShaCommit,
     fileName
   );
-
-  ipcRenderer.on('getFileDetails-reply', (event, detailsList) => {
-    fileDetails.value = detailsList;
-  });
 };
 
 export const useGit = () => ({
