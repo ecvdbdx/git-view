@@ -14,7 +14,7 @@ export default class GitReader {
           .trim()
           .split('$$');
         return {
-          sha,
+          sha: sha.replace("'format:", ''),
           message,
           date,
           author,
@@ -103,5 +103,36 @@ export default class GitReader {
    */
   async fetchAllGit(path) {
     await this.execGit(path, 'git fetch --all');
+  }
+
+  async getGitDiff(path, commit, stat) {
+    const commandResponse = await this.execGit(
+      path,
+      `git show ${commit} --pretty="format:" ${stat ? '--stat' : ''}`
+    );
+    return this.commitStatParser(commandResponse);
+  }
+
+  commitStatParser(commitDetails) {
+    const list = commitDetails
+      .trim()
+      .split('\n')
+      .map((item) =>
+        item
+          .split('|')
+          .map((value, index) => {
+            if (index === 1) {
+              return value.trim().split(' ');
+            } else {
+              return value.trim();
+            }
+          })
+          .flat()
+      );
+
+    return {
+      recap: list.pop()[0],
+      files: list,
+    };
   }
 }

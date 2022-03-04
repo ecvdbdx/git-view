@@ -1,6 +1,8 @@
 import {
   GET_GIT_BRANCHS_EVENT,
   GET_GIT_BRANCHS_REPLY,
+  GET_GIT_DIFF_EVENT,
+  GET_GIT_DIFF_REPLY,
   GET_GIT_LOGS_BY_OFFSET_EVENT,
   GET_GIT_LOGS_BY_OFFSET_REPLY,
   GET_GIT_LOGS_EVENT,
@@ -40,6 +42,14 @@ export default [
     fct: () => (event, offset) => {
       gitReader.getGitLogsByOffset(offset).then((commits) => {
         event.reply(GET_GIT_LOGS_BY_OFFSET_REPLY, commits);
+      });
+    },
+  },
+  {
+    name: GET_GIT_DIFF_EVENT,
+    fct: () => (event, folderPath, target, stat) => {
+      gitReader.getGitDiff(folderPath, target, stat).then((details) => {
+        event.reply(GET_GIT_DIFF_REPLY, details);
       });
     },
   },
