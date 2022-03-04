@@ -21,46 +21,37 @@ const headCommitSha = computed({
   },
 });
 
-const getCommits = () => {
-  ipcRenderer.send('getGitLogs-event', folderPath.value);
-  ipcRenderer.on('getGitLogs-reply', (event, commitList) => {
-    commits.value = commitList;
-  });
+const getCommits = async () => {
+  const result = await ipcRenderer.invoke('getGitLogs-event', folderPath.value);
+  commits.value = result;
 };
 
-const checkoutBranch = (branchName) => {
-  ipcRenderer.send('gitCheckout', folderPath.value, branchName);
-  getBranchs();
-  getCommits();
+const checkoutBranch = async (branchName) => {
+  await ipcRenderer.invoke('gitCheckout', folderPath.value, branchName);
+  await getBranchs();
+  await getCommits();
 };
 
-const getBranchs = () => {
-  ipcRenderer.send('getGitBranchs-event', folderPath.value);
-
-  ipcRenderer.on('getGitBranchs-reply', (event, branchList) => {
-    branchs.value = branchList;
-  });
+const getBranchs = async () => {
+  const result = await ipcRenderer.invoke(
+    'getGitBranchs-event',
+    folderPath.value
+  );
+  branchs.value = result;
 };
 
 const checkoutCommit = (commitSha) => {
-  ipcRenderer.send('gitCheckout', folderPath.value, commitSha);
+  ipcRenderer.invoke('gitCheckout', folderPath.value, commitSha);
   headCommitSha.value = commitSha;
 };
 
-const getGitLogsByOffset = (offset) => {
-  ipcRenderer.send('getGitLogsByOffset-event', offset);
-
-  ipcRenderer.on('getGitLogsByOffset-reply', (event, commitObject) => {
-    totalCommits.value = commitObject.totalCommits;
-    commits.value = commitObject;
-  });
-};
-const getDiffCommit = (commitSha, stat = true) => {
-  ipcRenderer.send('getGitDiff-event', folderPath.value, commitSha, stat);
-
-  ipcRenderer.on('getGitDiff-reply', (event, detailsList) => {
-    commitDetails.value = detailsList;
-  });
+const getDiffCommit = async (commitSha, stat = true) => {
+  commitDetails.value = await ipcRenderer.invoke(
+    'getGitDiff-event',
+    folderPath.value,
+    commitSha,
+    stat
+  );
 };
 
 export const useGit = () => ({
@@ -68,7 +59,6 @@ export const useGit = () => ({
   checkoutBranch,
   getBranchs,
   checkoutCommit,
-  getGitLogsByOffset,
   getDiffCommit,
   commits,
   branchs,

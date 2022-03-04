@@ -38,7 +38,7 @@ async function createWindow() {
     win.loadURL('app://./index.html');
   }
   // Initialize events
-  CustomEvents.forEach(({ name, fct }) => ipcMain.on(name, fct(win)));
+  CustomEvents.forEach(({ name, fct }) => ipcMain.handle(name, fct));
 }
 
 // Quit when all windows are closed.

@@ -25,17 +25,21 @@
 import { useRouter } from 'vue-router';
 
 import { useFolder } from '@/composables/useFolder';
+
 export default {
   name: 'ProjectHistoryItem',
+
   props: {
     projectPath: {
       type: String,
       default: '',
     },
   },
+
   setup(props) {
     const { setFolderPath } = useFolder();
     const router = useRouter();
+
     const handleClick = () => {
       setFolderPath(props.projectPath);
       router.push({
@@ -43,6 +47,7 @@ export default {
         query: { folderPath: props.projectPath },
       });
     };
+
     return { handleClick };
   },
 };
