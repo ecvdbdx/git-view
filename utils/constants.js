@@ -12,4 +12,6 @@ module.exports = {
   GET_GIT_LOGS_BY_OFFSET_REPLY: 'getGitLogsByOffset-reply',
   GET_GIT_DIFF_EVENT: 'getGitDiff-event',
   GET_GIT_DIFF_REPLY: 'getGitDiff-reply',
+  GET_FILE_DETAILS_EVENT: 'getFileDetails-event',
+  GET_FILE_DETAILS_REPLY: 'getFileDetails-reply',
 };

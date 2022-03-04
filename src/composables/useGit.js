@@ -13,6 +13,7 @@ const offset = computed(() => limit.value * index.value);
 const currentBranchCommits = ref(0);
 const files = ref([]);
 const commitDetails = ref([]);
+const fileDetails = ref([]);
 
 const headCommitSha = computed({
   get: () => commits.value.find((commit) => commit.isHead)?.sha,
@@ -78,6 +79,20 @@ const getDiffCommit = async (commitSha, stat = true) => {
   );
 };
 
+const getFileDetails = (commitSha, prevShaCommit, fileName) => {
+  ipcRenderer.send(
+    'getFileDetails-event',
+    folderPath.value,
+    commitSha,
+    prevShaCommit,
+    fileName
+  );
+
+  ipcRenderer.on('getFileDetails-reply', (event, detailsList) => {
+    fileDetails.value = detailsList;
+  });
+};
+
 export const useGit = () => ({
   getCommits,
   checkoutBranch,
@@ -85,6 +100,7 @@ export const useGit = () => ({
   checkoutCommit,
   getBranchsInfo,
   getDiffCommit,
+  getFileDetails,
   commits,
   branchs,
   headCommitSha,

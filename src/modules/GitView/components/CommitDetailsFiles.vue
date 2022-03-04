@@ -6,7 +6,12 @@
     <li
       class="flex items-center"
       v-for="([filename, affected_line, stat], index) in files"
-      @click="isFileDetailsOpened = true"
+      @click="
+        () => {
+          isFileDetailsOpened = true;
+          fileName = filename;
+        }
+      "
       :key="index"
     >
       <span class="mr-2">{{ filename }}</span>
@@ -27,7 +32,7 @@ export default {
   name: 'CommitDetailsFiles',
   setup() {
     const { getDiffCommit, commitDetails } = useGit();
-    const { shaCommit, isFileDetailsOpened } = useGitView();
+    const { shaCommit, isFileDetailsOpened, fileName } = useGitView();
 
     const recap = computed(() => commitDetails.value.recap);
     const files = computed(() => commitDetails.value.files);
@@ -61,6 +66,7 @@ export default {
       getDiffCommit,
       formatStat,
       isFileDetailsOpened,
+      fileName,
     };
   },
 };

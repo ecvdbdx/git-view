@@ -1,4 +1,6 @@
 import {
+  GET_FILE_DETAILS_EVENT,
+  GET_FILE_DETAILS_REPLY,
   GET_GIT_BRANCHS_EVENT,
   GET_GIT_BRANCHS_INFO_EVENT,
   GET_GIT_DIFF_EVENT,
@@ -41,6 +43,16 @@ export default [
     fct: async (event, folderPath, target, stat) => {
       const details = await gitReader.getGitDiff(folderPath, target, stat);
       return details;
+    },
+  },
+  {
+    name: GET_FILE_DETAILS_EVENT,
+    fct: () => (event, folderPath, sha, prevSha, fileName) => {
+      gitReader
+        .getFileDetails(folderPath, sha, prevSha, fileName)
+        .then((details) => {
+          event.reply(GET_FILE_DETAILS_REPLY, details);
+        });
     },
   },
 ];

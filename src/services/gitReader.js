@@ -101,6 +101,14 @@ export default class GitReader {
     return this.commitStatParser(commandResponse);
   }
 
+  async getFileDetails(path, commit, prevCommit, fileName) {
+    const commandResponse = await this.execGit(
+      path,
+      `git diff ${commit} ${prevCommit} ${fileName}`
+    );
+    return this.fileDetailsParser(commandResponse);
+  }
+
   commitStatParser(commitDetails) {
     const list = commitDetails
       .trim()
@@ -124,8 +132,8 @@ export default class GitReader {
     };
   }
 
-  commitDetailsParser(commitDetails) {
-    const allResultCommandLine = commitDetails;
+  fileDetailsParser(fileDetails) {
+    const allResultCommandLine = fileDetails;
 
     const allLinesSplited = allResultCommandLine.split('\n');
 
@@ -161,6 +169,6 @@ export default class GitReader {
       }
     }
 
-    return allFiles;
+    return allFiles[0];
   }
 }
