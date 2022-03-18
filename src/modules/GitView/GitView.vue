@@ -49,12 +49,14 @@ export default {
       currentBranchCommits,
       files,
       commitDetails,
+      resetState,
     } = useGit();
 
     const { isDetailsOpened } = useGitView();
 
     onBeforeMount(async () => {
       if (!folderPath.value) router.push('/');
+      resetState();
       await getCommits();
       await getBranchs();
       await getBranchsInfo();
