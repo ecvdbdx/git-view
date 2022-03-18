@@ -24,7 +24,6 @@
 
     <div>
       <p class="pl-4">{{ sha }}</p>
-      <p class="pl-4">{{ prevSha }}</p>
     </div>
 
     <p class="pl-4" v-if="isHead">HEAD</p>

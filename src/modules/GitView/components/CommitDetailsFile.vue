@@ -28,7 +28,7 @@ export default {
     });
 
     watch(shaCommit, (newSha) => {
-      getFileDetails(newSha.value, prevShaCommit.value, fileName.value);
+      getFileDetails(newSha, prevShaCommit.value, fileName.value);
     });
 
     watch(fileDetails, (newFileDetails) => {
