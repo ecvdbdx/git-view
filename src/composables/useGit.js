@@ -17,7 +17,7 @@ const commitDetails = ref([]);
 const headCommitSha = computed({
   get: () => commits.value.find((commit) => commit.isHead)?.sha,
   set: (newValue) => {
-    commits.value.commits.map((commit) => {
+    commits.value.map((commit) => {
       commit.isHead = commit.sha === newValue;
       return commit;
     });
@@ -62,7 +62,6 @@ const getBranchsInfo = async () => {
     folderPath.value
   );
   currentBranchCommits.value = parseInt(branchInfo);
-  console.log(branchInfo);
 };
 
 const checkoutCommit = (commitSha) => {

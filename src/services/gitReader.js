@@ -73,7 +73,6 @@ export default class GitReader {
       path,
       'git rev-list --count HEAD'
     );
-    console.log('OUI' + commandResponse);
     return commandResponse;
   }
 
