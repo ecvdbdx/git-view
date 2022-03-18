@@ -1,4 +1,5 @@
 import { ipcRenderer } from 'electron';
+import gitDiffParser from 'gitdiff-parser';
 import { computed, ref } from 'vue';
 
 import { useFolder } from './useFolder';
@@ -78,15 +79,16 @@ const getDiffCommit = async (commitSha, stat = true) => {
     stat
   );
 };
-
 const getFileDetails = async (commitSha, prevShaCommit, fileName) => {
-  fileDetails.value = await ipcRenderer.invoke(
+  const data = await ipcRenderer.invoke(
     'getFileDetails-event',
     folderPath.value,
     commitSha,
     prevShaCommit,
     fileName
   );
+
+  fileDetails.value = gitDiffParser.parse(data);
 };
 
 export const useGit = () => ({
