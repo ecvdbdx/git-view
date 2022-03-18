@@ -6,6 +6,8 @@ module.exports = {
   GET_GIT_BRANCHS_EVENT: 'getGitBranchs-event',
   GET_GIT_BRANCHS_REPLY: 'getGitBranchs-reply',
   GIT_CHECKOUT: 'gitCheckout',
+  GET_GIT_BRANCHS_INFO_EVENT: 'getGitBranchsInfo-event',
+  GET_GIT_BRANCHS_INFO_REPLY: 'getGitBranchsInfo-reply',
   GET_GIT_LOGS_BY_OFFSET_EVENT: 'getGitLogsByOffset-event',
   GET_GIT_LOGS_BY_OFFSET_REPLY: 'getGitLogsByOffset-reply',
   GET_GIT_DIFF_EVENT: 'getGitDiff-event',

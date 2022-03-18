@@ -7,14 +7,17 @@ const { folderPath } = useFolder();
 
 const commits = ref([]);
 const branchs = ref([]);
-const totalCommits = ref(0);
+const limit = ref(10);
+const index = ref(0);
+const offset = computed(() => limit.value * index.value);
+const currentBranchCommits = ref(0);
 const files = ref([]);
 const commitDetails = ref([]);
 
 const headCommitSha = computed({
   get: () => commits.value.find((commit) => commit.isHead)?.sha,
   set: (newValue) => {
-    commits.value.commits.map((commit) => {
+    commits.value.map((commit) => {
       commit.isHead = commit.sha === newValue;
       return commit;
     });
@@ -22,13 +25,26 @@ const headCommitSha = computed({
 });
 
 const getCommits = async () => {
-  const result = await ipcRenderer.invoke('getGitLogs-event', folderPath.value);
-  commits.value = result;
+  const result = await ipcRenderer.invoke(
+    'getGitLogs-event',
+    folderPath.value,
+    offset.value,
+    limit.value
+  );
+  commits.value = [...result, ...commits.value];
+};
+
+const resetState = () => {
+  commits.value = [];
+  index.value = 0;
+  currentBranchCommits.value = 0;
 };
 
 const checkoutBranch = async (branchName) => {
   await ipcRenderer.invoke('gitCheckout', folderPath.value, branchName);
   await getBranchs();
+  await getBranchsInfo();
+  resetState();
   await getCommits();
 };
 
@@ -38,6 +54,14 @@ const getBranchs = async () => {
     folderPath.value
   );
   branchs.value = result;
+};
+
+const getBranchsInfo = async () => {
+  const branchInfo = await ipcRenderer.invoke(
+    'getGitBranchsInfo-event',
+    folderPath.value
+  );
+  currentBranchCommits.value = parseInt(branchInfo);
 };
 
 const checkoutCommit = (commitSha) => {
@@ -59,11 +83,14 @@ export const useGit = () => ({
   checkoutBranch,
   getBranchs,
   checkoutCommit,
+  getBranchsInfo,
   getDiffCommit,
   commits,
   branchs,
   headCommitSha,
-  totalCommits,
+  index,
+  currentBranchCommits,
   files,
   commitDetails,
+  resetState,
 });

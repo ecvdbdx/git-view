@@ -1,56 +1,37 @@
 <template>
-  <div class="flex h-full flex-col overflow-hidden">
-    <div class="flex h-full items-center">
-      <SideBar :branchs="branchs" />
-      <div class="w-full flex h-full overflow-scroll relative">
-        <p class="text-center absolute w-full text-align-middle py-4">
-          {{ folderPath }}
-        </p>
-        <div
-          ref="commitList"
-          class="flex flex-col w-full h-full overflow-scroll justify-between"
-        >
-          <div class="flex items-end h-1/2">
-            <div class="flex relative">
-              <CommitView
-                v-for="(commit, index) in commits.commits"
-                :key="index"
-                :commit="commit"
-                :prev-commit="index - 1 >= 0 ? commits[index - 1] : null"
-              />
-            </div>
-          </div>
-          <div class="h-2/5">
-            <CommitDetails
-              v-if="isDetailsOpened"
-              @on-close="isDetailsOpened = false"
-              :details="commitDetails"
-            />
-          </div>
-        </div>
-      </div>
+  <div class="flex h-full w-full overflow-hidden">
+    <SideBar :branchs="branchs" />
+    <div class="overflow-hidden h-full items-center relative">
+      <p class="text-center w-full text-align-middle py-4">
+        {{ folderPath }}
+      </p>
+      <CommitList :nb-commits="currentBranchCommits" :commits="commits" />
+      <CommitDetails
+        class="h-2/5 absolute bottom-0 bg-white w-full"
+        v-if="isDetailsOpened"
+        @on-close="isDetailsOpened = false"
+        :details="commitDetails"
+      />
     </div>
-    <button :disabled="!prevIsActive" @click="prev">prev</button>
-    <button :disabled="!nextIsActive" @click="next">next</button>
   </div>
 </template>
 
 <script>
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useFolder } from '@/composables/useFolder';
 import { useGit } from '@/composables/useGit';
 
-import { CommitDetails, CommitView, SideBar } from './components';
+import { CommitDetails, CommitList, SideBar } from './components';
 import { useGitView } from './composables/useGitView';
 
 export default {
   name: 'GitViewModule',
 
   components: {
-    CommitView,
     SideBar,
+    CommitList,
     CommitDetails,
   },
 
@@ -61,52 +42,25 @@ export default {
       getCommits,
       getBranchs,
       checkoutBranch,
+      getBranchsInfo,
       headCommitSha,
       commits,
       branchs,
-      getGitLogsByOffset,
+      currentBranchCommits,
       files,
       commitDetails,
+      resetState,
     } = useGit();
+
     const { isDetailsOpened } = useGitView();
-    const commitList = ref(null);
-    const offset = ref(commits.value.totalCommits - 10);
-    const prevIsActive = ref(true);
-    const nextIsActive = ref(false);
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
       if (!folderPath.value) router.push('/');
-      getCommits();
-      getBranchs();
+      resetState();
+      await getCommits();
+      await getBranchs();
+      await getBranchsInfo();
     });
-
-    onMounted(() => {
-      commitList.value.scrollLeft = commitList.value.scrollWidth;
-    });
-
-    const next = () => {
-      offset.value += 10;
-      if (offset.value + 10 >= commits.value.totalCommits) {
-        nextIsActive.value = false;
-        prevIsActive.value = true;
-      } else {
-        prevIsActive.value = true;
-        nextIsActive.value = true;
-      }
-      getGitLogsByOffset(offset.value);
-    };
-
-    const prev = () => {
-      offset.value -= 10;
-      if (offset.value < 0) {
-        offset.value = 0;
-        prevIsActive.value = false;
-      } else {
-        prevIsActive.value = true;
-        nextIsActive.value = true;
-      }
-      getGitLogsByOffset(offset.value);
-    };
 
     return {
       commits,
@@ -114,15 +68,10 @@ export default {
       checkoutBranch,
       headCommitSha,
       folderPath,
-      commitList,
-      offset,
-      next,
-      prev,
-      nextIsActive,
-      prevIsActive,
       files,
       commitDetails,
       isDetailsOpened,
+      currentBranchCommits,
     };
   },
 };
