@@ -47,12 +47,14 @@ export default [
   },
   {
     name: GET_FILE_DETAILS_EVENT,
-    fct: () => (event, folderPath, sha, prevSha, fileName) => {
-      gitReader
-        .getFileDetails(folderPath, sha, prevSha, fileName)
-        .then((details) => {
-          event.reply(GET_FILE_DETAILS_REPLY, details);
-        });
+    fct: async (event, folderPath, sha, prevSha, fileName) => {
+      const details = await gitReader.getFileDetails(
+        folderPath,
+        sha,
+        prevSha,
+        fileName
+      );
+      return details;
     },
   },
 ];
