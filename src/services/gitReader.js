@@ -23,7 +23,6 @@ export default class GitReader {
         name: branch.replace('*', '').trim(),
         isCurrent: branch.includes('*'),
       }))
-      .reverse()
       .filter(({ name }) => name);
   }
 
@@ -61,7 +60,7 @@ export default class GitReader {
    * @returns Promise of Array
    */
   async getGitBranchs(path) {
-    const commandResponse = await this.execGit(path, 'git branch');
+    const commandResponse = await this.execGit(path, 'git branch -a');
     return this.branchsParser(commandResponse);
   }
 

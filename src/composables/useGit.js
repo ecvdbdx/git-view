@@ -34,10 +34,16 @@ const getCommits = async () => {
   commits.value = [...result, ...commits.value];
 };
 
+const resetCommits = () => {
+  commits.value = [];
+  index.value = 0;
+};
+
 const checkoutBranch = async (branchName) => {
   await ipcRenderer.invoke('gitCheckout', folderPath.value, branchName);
   await getBranchs();
   await getBranchsInfo();
+  resetCommits();
   await getCommits();
 };
 
@@ -55,6 +61,7 @@ const getBranchsInfo = async () => {
     folderPath.value
   );
   currentBranchCommits.value = parseInt(branchInfo);
+  console.log(branchInfo);
 };
 
 const checkoutCommit = (commitSha) => {
