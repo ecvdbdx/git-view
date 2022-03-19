@@ -1,9 +1,9 @@
-import { GET_FOLDER_PATH_EVENT } from '../../utils/constants';
 import FolderReader from '../services/folderReader';
+import { GET_PATH } from '../utils/constants/FolderEvents';
 
 export default [
   {
-    name: GET_FOLDER_PATH_EVENT,
+    name: GET_PATH,
     fct: async (event, win) => {
       try {
         const folderReader = new FolderReader(win);

@@ -2,6 +2,15 @@ import { ipcRenderer } from 'electron';
 import gitDiffParser from 'gitdiff-parser';
 import { computed, ref } from 'vue';
 
+import {
+  DO_CHECKOUT,
+  GET_BRANCHS,
+  GET_BRANCHS_INFO,
+  GET_DIFF,
+  GET_FILE_DETAILS,
+  GET_LOGS,
+} from '@/utils/constants/GitEvents';
+
 import { useFolder } from './useFolder';
 
 const { folderPath } = useFolder();
@@ -28,7 +37,7 @@ const headCommitSha = computed({
 
 const getCommits = async () => {
   const result = await ipcRenderer.invoke(
-    'getGitLogs-event',
+    GET_LOGS,
     folderPath.value,
     offset.value,
     limit.value
@@ -43,7 +52,7 @@ const resetState = () => {
 };
 
 const checkoutBranch = async (branchName) => {
-  await ipcRenderer.invoke('gitCheckout', folderPath.value, branchName);
+  await ipcRenderer.invoke(DO_CHECKOUT, folderPath.value, branchName);
   await getBranchs();
   await getBranchsInfo();
   resetState();
@@ -51,29 +60,26 @@ const checkoutBranch = async (branchName) => {
 };
 
 const getBranchs = async () => {
-  const result = await ipcRenderer.invoke(
-    'getGitBranchs-event',
-    folderPath.value
-  );
+  const result = await ipcRenderer.invoke(GET_BRANCHS, folderPath.value);
   branchs.value = result;
 };
 
 const getBranchsInfo = async () => {
   const branchInfo = await ipcRenderer.invoke(
-    'getGitBranchsInfo-event',
+    GET_BRANCHS_INFO,
     folderPath.value
   );
   currentBranchCommits.value = parseInt(branchInfo);
 };
 
 const checkoutCommit = (commitSha) => {
-  ipcRenderer.invoke('gitCheckout', folderPath.value, commitSha);
+  ipcRenderer.invoke(DO_CHECKOUT, folderPath.value, commitSha);
   headCommitSha.value = commitSha;
 };
 
 const getDiffCommit = async (commitSha, stat = true) => {
   commitDetails.value = await ipcRenderer.invoke(
-    'getGitDiff-event',
+    GET_DIFF,
     folderPath.value,
     commitSha,
     stat
@@ -81,13 +87,12 @@ const getDiffCommit = async (commitSha, stat = true) => {
 };
 const getFileDetails = async (commitSha, prevShaCommit, fileName) => {
   const data = await ipcRenderer.invoke(
-    'getFileDetails-event',
+    GET_FILE_DETAILS,
     folderPath.value,
     commitSha,
     prevShaCommit,
     fileName
   );
-  console.log(data);
 
   fileDetails.value = gitDiffParser.parse(data);
 };
