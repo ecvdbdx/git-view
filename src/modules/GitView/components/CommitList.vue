@@ -11,6 +11,7 @@
         v-for="(commit, commitIndex) in commits"
         :key="commitIndex"
         :commit="commit"
+        :prev-commit="commitIndex - 1 >= 0 ? commits[commitIndex - 1] : null"
       />
     </div>
   </div>

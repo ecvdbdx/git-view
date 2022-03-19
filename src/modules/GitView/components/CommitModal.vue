@@ -49,6 +49,7 @@ export default {
     },
     prevCommit: {
       type: Object,
+      required: true,
     },
   },
 

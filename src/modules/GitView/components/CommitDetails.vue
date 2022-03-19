@@ -1,9 +1,9 @@
 <template>
   <div
     id="details-sidebar"
-    class="flex flex-col border-t-green-400 border-solid border-t-width-2"
+    class="flex flex-col border-t-green-400 border-solid border-t-width-2 overflow-auto p-2"
   >
-    <DsButton @click="closeDetail" class="mx-4 mt-4">Close</DsButton>
+    <DsButton @click="closeDetail" class="mt-4">Close</DsButton>
 
     <CommitDetailsFiles v-if="!isFileDetailsOpened" />
     <CommitDetailsFile v-else />
@@ -19,6 +19,7 @@ import CommitDetailsFiles from './CommitDetailsFiles.vue';
 
 export default {
   name: 'CommitDetails',
+
   components: {
     CommitDetailsFile,
     CommitDetailsFiles,

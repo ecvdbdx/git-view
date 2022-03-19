@@ -96,7 +96,7 @@ export default class GitReader {
   async getGitDiff(path, commit, stat) {
     const commandResponse = await this.execGit(
       path,
-      `git show ${commit} --pretty="format:" ${stat ? '--stat' : ''}`
+      `git show ${commit} --pretty="format:" ${stat ? '--stat="124"' : ''}`
     );
     return this.commitStatParser(commandResponse);
   }

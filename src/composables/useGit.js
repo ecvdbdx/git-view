@@ -87,6 +87,7 @@ const getFileDetails = async (commitSha, prevShaCommit, fileName) => {
     prevShaCommit,
     fileName
   );
+  console.log(data);
 
   fileDetails.value = gitDiffParser.parse(data);
 };
@@ -106,5 +107,6 @@ export const useGit = () => ({
   currentBranchCommits,
   files,
   commitDetails,
+  fileDetails,
   resetState,
 });
