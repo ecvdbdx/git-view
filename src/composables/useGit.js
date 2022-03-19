@@ -1,4 +1,5 @@
 import { ipcRenderer } from 'electron';
+import gitDiffParser from 'gitdiff-parser';
 import { computed, ref } from 'vue';
 
 import { useFolder } from './useFolder';
@@ -13,6 +14,7 @@ const offset = computed(() => limit.value * index.value);
 const currentBranchCommits = ref(0);
 const files = ref([]);
 const commitDetails = ref([]);
+const fileDetails = ref([]);
 
 const headCommitSha = computed({
   get: () => commits.value.find((commit) => commit.isHead)?.sha,
@@ -77,6 +79,18 @@ const getDiffCommit = async (commitSha, stat = true) => {
     stat
   );
 };
+const getFileDetails = async (commitSha, prevShaCommit, fileName) => {
+  const data = await ipcRenderer.invoke(
+    'getFileDetails-event',
+    folderPath.value,
+    commitSha,
+    prevShaCommit,
+    fileName
+  );
+  console.log(data);
+
+  fileDetails.value = gitDiffParser.parse(data);
+};
 
 export const useGit = () => ({
   getCommits,
@@ -85,6 +99,7 @@ export const useGit = () => ({
   checkoutCommit,
   getBranchsInfo,
   getDiffCommit,
+  getFileDetails,
   commits,
   branchs,
   headCommitSha,
@@ -92,5 +107,6 @@ export const useGit = () => ({
   currentBranchCommits,
   files,
   commitDetails,
+  fileDetails,
   resetState,
 });
